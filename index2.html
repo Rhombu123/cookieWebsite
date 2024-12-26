@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicious Cookies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff8e1;
+            color: #4d2c1f;
+        }
+        header {
+            background-color: #d2691e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #f4a460;
+            padding: 10px;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+        .container {
+            padding: 20px;
+        }
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .product {
+            background: #fff;
+            border: 1px solid #d2691e;
+            border-radius: 10px;
+            padding: 15px;
+            width: calc(33.333% - 20px); /* Ensure 3 per row with spacing */
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .product img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        footer {
+            background-color: #d2691e;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Delicious Cookies</h1>
+        <p>Indulge your sweet tooth with our handcrafted cookies, baked fresh daily with the finest ingredients. Whether you're a chocolate lover or a fan of classic sugar cookies, we've got something to satisfy every craving!</p>
+    </header>
+
+    <nav>
+        <a href="#products">Our Cookies</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#contact">Contact Us</a>
+    </nav>
+
+    <div class="container" id="products">
+        <h2>Our Cookies</h2>
+        <div class="products">
+            <div class="product">
+                <img src="chocolate-chip.jpg" alt="Chocolate Chip Cookies">
+                <h3>Chocolate Chip</h3>
+                <p>Soft, chewy, and packed with gooey chocolate chips in every bite. A timeless favorite for all ages!</p>
+                <p><strong>$5.99 / dozen</strong></p>
+            </div>
+            <div class="product">
+                <img src="oatmeal-raisin.jpg" alt="Oatmeal Raisin Cookies">
+                <h3>Oatmeal Raisin</h3>
+                <p>Wholesome oats and juicy raisins combine for a cookie that's hearty, sweet, and full of nostalgia.</p>
+                <p><strong>$6.49 / dozen</strong></p>
+            </div>
+            <div class="product">
+                <img src="sugar-cookies.jpg" alt="Sugar Cookies">
+                <h3>Sugar Cookies</h3>
+                <p>Delightfully simple and buttery with a delicate crunch—perfect for any occasion!</p>
+                <p><strong>$5.49 / dozen</strong></p>
+            </div>
+            <div class="product">
+                <img src="peanut-butter.jpg" alt="Peanut Butter Cookies">
+                <h3>Peanut Butter</h3>
+                <p>Rich peanut butter flavor with the perfect balance of sweetness. A treat that's both nutty and indulgent!</p>
+                <p><strong>$5.99 / dozen</strong></p>
+            </div>
+            <div class="product">
+                <img src="snickerdoodle.jpg" alt="Snickerdoodles">
+                <h3>Snickerdoodles</h3>
+                <p>Cinnamon-sugar coated cookies that are soft, sweet, and bursting with warm spice flavor.</p>
+                <p><strong>$6.49 / dozen</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="testimonials">
+        <h2>What Our Customers Say</h2>
+        <blockquote>
+            <p>"The chocolate chip cookies are to die for! Highly recommend!"</p>
+            <cite>- Emily R.</cite>
+        </blockquote>
+        <blockquote>
+            <p>"Perfectly soft and delicious. My kids love them!"</p>
+            <cite>- James T.</cite>
+        </blockquote>
+        <blockquote>
+            <p>"I love how you can taste the quality in every bite. Highly recommend the oatmeal raisin!"</p>
+            <cite>- Diane C.</cite>
+        </blockquote>
+    </div>
+
+    <div class="container" id="contact">
+        <h2>Contact Us</h2>
+        <p>Have a question or want to place a custom order? Reach out to us!</p>
+        <p><strong>Address:</strong> 123 Cookie Lane, Bakersville, Sweetland</p>
+        <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+        <p><strong>Email:</strong> contact@deliciouscookies.com</p>
+        <form action="submit-form.php" method="POST">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" required><br><br>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+            <label for="message">Message:</label><br>
+            <textarea id="message" name="message" rows="5" required></textarea><br><br>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
