@@ -5,107 +5,140 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delicious Cookies</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
 </head>
 <body>
-    <header>
-        <h1>Welcome to Delicious Cookies</h1>
-        <p>Home of the best handmade cookies!</p>
-    </header>
-
-
     <nav>
-         <ul>
-             <li><a href="">Our Cookies</a></li>
-             <li><a href="#testimonials">Testimonials</a></li>
-             <li><a href="#contact">Contact Us</a></li>
-             <li><a href="/addCart.html">Sign Up</a></li>
-             <li><a href="">Log In</a></li>
-         </ul>
+        <ul>
+            <div class="logo">
+                <img src="assets/img/logo.png" alt="Delicious Cookies Logo">
+            </div>
+            <div class="left-items">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Our Cookies</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+            </div>
+            <li class="cart"><a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+        </ul>
     </nav>
 
-    <div class="container" id="products">
-        <h2>Our Cookies</h2>
-        <div class="products">
-            <div class="product">
-                <img src="/assets/img/BrownButterCCC-BP-12-1.webp" alt="Chocolate Chip Cookies">
-                <h3>Chocolate Chip</h3>
-                <p>$5.99 / dozen</p>
-                <button>Add To Cart</button>
-            </div>
-            <div class="product">
-                <img src="assets/img/oatmeal-raisin-cookies.jpg" alt="Oatmeal Raisin Cookies">
-                <h3>Oatmeal Raisin</h3>
-                <p>$6.49 / dozen</p>
-                <li><button><a href="">Add To Cart</a></button></li>
-            </div>
-            <div class="product">
-                <img src="assets/img/SugarCookiesRecipe.webp" alt="Sugar Cookies">
-                <h3>Sugar Cookies</h3>
-                <p>$5.49 / dozen</p>
-                <button>Add To Cart</button>
-            </div>
-            <div class="product">
-                <img src="assets/img/ChocolateChocolateChipCookies-BP-1.webp" alt="Sugar Cookies">
-                <h3>Sugar Cookies</h3>
-                <p>$6.99 / dozen</p>
-                <button>Add To Cart</button>
-            </div>
-            <div class="product">
-                <img src="assets/img/SugarCookiesRecipe.webp" alt="Sugar Cookies">
-                <h3>Sugar Cookies</h3>
-                <p>$5.49 / dozen</p>
-            </div>
-            <div class="product">
-                <img src="assets/img/SugarCookiesRecipe.webp" alt="Sugar Cookies">
-                <h3>Sugar Cookies</h3>
-                <p>$5.49 / dozen</p>
-            </div><div class="product">
-                <img src="assets/img/SugarCookiesRecipe.webp" alt="Sugar Cookies">
-                <h3>Sugar Cookies</h3>
-                <p>$5.49 / dozen</p>
-            </div><div class="product">
-                <img src="assets/img/SugarCookiesRecipe.webp" alt="Sugar Cookies">
-                <h3>Sugar Cookies</h3>
-                <p>$5.49 / dozen</p>
-            </div><div class="product">
-                <img src="assets/img/SugarCookiesRecipe.webp" alt="Sugar Cookies">
-                <h3>Sugar Cookies</h3>
-                <p>$5.49 / dozen</p>
-            </div><div class="product">
-                <img src="assets/img/SugarCookiesRecipe.webp" alt="Sugar Cookies">
-                <h3>Sugar Cookies</h3>
-                <p>$5.49 / dozen</p>
-            </div>
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Your Cookie<br>Your Moment<br>Your Joy</h1>
+            <p>Experience the perfect blend of homemade goodness and artisanal craftsmanship in every bite.</p>
+            <a href="products.html" class="cta-button">Explore Our Cookies</a>
+        </div>
+        <div class="hero-images">
+            <div class="circle-image main"></div>
+            <div class="circle-image secondary"></div>
         </div>
     </div>
 
-    <div class="container" id="testimonials">
-        <h2>What Our Customers Say</h2>
-        <blockquote>
-            <p>"The chocolate chip cookies are to die for! Highly recommend!"</p>
-            <cite>- Emily R.</cite>
-        </blockquote>
-        <blockquote>
-            <p>"Perfectly soft and delicious. My kids love them!"</p>
-            <cite>- James T.</cite>
-        </blockquote>
+    <div class="stats-section">
+        <div class="stat-item">
+            <i class="fas fa-cookie"></i>
+            <h2>190+</h2>
+            <p>Varieties Baked</p>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-heart"></i>
+            <h2>123K</h2>
+            <p>Happy Customers</p>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-store"></i>
+            <h2>58</h2>
+            <p>Retail Locations</p>
+        </div>
     </div>
 
-    <div class="container" id="contact">
-        <h2>Contact Us</h2>
-        <form action="submit-form.php" method="POST">
-            <label for="name">Name:</label><br>
-            <input type="text" id="name" name="name" required><br><br>
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br><br>
-            <label for="message">Message:</label><br>
-            <textarea id="message" name="message" rows="5" required></textarea><br><br>
-            <button type="submit">Send</button>
-        </form>
+    <div class="featured-products">
+        <h2>Featured Cookies</h2>
+        <div class="product-grid">
+            <div class="featured-item">
+                <img src="assets/img/BrownButterCCC-BP-12-1.webp" alt="Classic Chocolate Chip">
+                <h3>Classic Chocolate Chip</h3>
+                <p>Our signature recipe since 1995</p>
+            </div>
+            <div class="featured-item">
+                <img src="assets/img/oatmeal-raisin-cookies.jpg" alt="Oatmeal Raisin">
+                <h3>Oatmeal Raisin</h3>
+                <p>Wholesome goodness in every bite</p>
+            </div>
+            <div class="featured-item">
+                <img src="assets/img/macadamia-nut-cookies.jpeg" alt="White Chocolate Macadamia">
+                <h3>White Chocolate Macadamia</h3>
+                <p>Premium nuts and Belgian chocolate</p>
+            </div>
+        </div>
+        <a href="products.html" class="view-all-button">View All Cookies</a>
+    </div>
+
+    <div class="testimonials" id="testimonials">
+        <h2>What Our Customers Say</h2>
+        <div class="testimonial-grid">
+            <blockquote class="testimonial-card">
+                <p>"These cookies remind me of my grandmother's baking. Absolutely perfect!"</p>
+                <cite>- Emily R.</cite>
+            </blockquote>
+            <blockquote class="testimonial-card">
+                <p>"The best cookies in town! My kids' favorite after-school treat."</p>
+                <cite>- James T.</cite>
+            </blockquote>
+            <blockquote class="testimonial-card">
+                <p>"Fresh, delicious, and always consistent. A must-try!"</p>
+                <cite>- Sarah M.</cite>
+            </blockquote>
+        </div>
+    </div>
+
+    <div class="contact-section" id="contact">
+        <h2>Get in Touch</h2>
+        <div class="contact-container">
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-button">Send Message</button>
+            </form>
+        </div>
     </div>
 
     <footer>
-        <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Delicious Cookies</h3>
+                <p>Baking happiness since 1995</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: info@deliciouscookies.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
+        </div>
     </footer>
 </body>
 </html>

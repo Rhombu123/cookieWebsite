@@ -15,28 +15,60 @@ header {
 
 /* --------------Nav styles-------------- */
 nav {
+    background-color: #333;
+    padding: 1.5rem;
+    margin-bottom: 0;
+    padding-bottom: 1rem; 
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    margin-right: 2rem;
+}
+
+.logo img {
+    height: 55px;  /* Increased from 40px */
+    width: auto;
+    vertical-align: middle;
+}
+
+nav ul li:not(.cart) {
+    margin: 0 1.2rem;
+}
+
+nav .left-items {
     display: flex;
     justify-content: center;
-    background-color: #f4a460;
-    padding: 10px;
-    font-size:x-large
+    flex: 1;
+    gap: 2rem;
 }
+
 nav ul li a {
-    margin: 0 15px;
-    text-decoration: none;
     color: white;
-    font-weight: bold;
-    padding: 5px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
 }
+
 nav ul li a:hover {
-    color: #d2691e;
+    color: #ffd700;
 }
-nav ul {
-    display: flex;
+
+nav ul li.cart {
+    margin-left: auto;
+    padding-right: 10px;
 }
-nav ul li  {
-    list-style-type: none;
-    padding: 2px;
+
+nav ul li.cart a i {
+    margin-right: 5px;
 }
 
 /* --------------Main styles-------------- */
@@ -44,25 +76,48 @@ nav ul li  {
     padding: 20px;
 }
 .products {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    max-width: 1200px;
-    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
 }
 .product {
-    background: #fff;
-    border: 1px solid #d2691e;
+    background: white;
     border-radius: 10px;
-    padding: 15px;
-    width: 250px;
+    padding: 1rem;
     text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+.product:hover {
+    transform: translateY(-5px);
 }
 .product img {
-    max-width: 100%;
-    border-radius: 10px;
-    max-height: 60%;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+.product h3 {
+    margin: 0.5rem 0;
+    color: #333;
+}
+.product p {
+    color: #666;
+    margin-bottom: 1rem;
+}
+.product button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.product button:hover {
+    background-color: #555;
 }
 footer {
     background-color: #d2691e;
@@ -102,5 +157,350 @@ button :hover{
 @media (max-width: 480px) {
     .products {
         grid-template-columns: 1fr; /* Single column for very small screens */
+    }
+}
+
+
+/* --------------Cart styles-------------- */
+.checkout-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.order-summary {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Login Page Styles */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+.login-form {
+    background: white;
+    padding: 3rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 2rem;
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.form-options {
+    margin: 2rem 0;
+}
+
+.forgot-password {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.login-button {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #555;
+}
+
+.signup-link {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.signup-link a {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Container spacing */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+/* Hero Section */
+.hero-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem 8%;
+    background-color: #fff5eb;
+    min-height: 80vh;
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 600px;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.hero-images {
+    flex: 1;
+    position: relative;
+    margin-left: -50px;
+}
+
+.circle-image {
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+}
+
+.circle-image.main {
+    background-image: url('../img/BrownButterCCC-BP-12-1.webp');
+    position: relative;
+    z-index: 2;
+    margin-left: 100px;
+}
+
+.circle-image.secondary {
+    background-image: url('../img/ChocolateChocolateChipCookies-BP-1.webp');
+    position: absolute;
+    top: 150px;
+    right: 150px;
+    width: 300px;
+    height: 300px;
+}
+
+/* Stats Section */
+.stats-section {
+    display: flex;
+    justify-content: space-around;
+    padding: 4rem 8%;
+    background-color: #fff;
+    margin-top: -50px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item i {
+    font-size: 2rem;
+    color: #a67c52;
+    margin-bottom: 1rem;
+}
+
+.stat-item h2 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+/* Featured Products */
+.featured-products {
+    padding: 4rem 8%;
+    text-align: center;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.featured-item {
+    padding: 2rem;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.featured-item:hover {
+    transform: translateY(-10px);
+}
+
+.featured-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+/* Buttons */
+.cta-button, .view-all-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background-color: #a67c52;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover, .view-all-button:hover {
+    background-color: #8b6642;
+}
+
+/* Testimonials */
+.testimonials {
+    background-color: #fff5eb;
+    padding: 4rem 8%;
+    text-align: center;
+}
+
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.testimonial-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 4rem 8%;
+    text-align: center;
+}
+
+.contact-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Footer */
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    padding: 4rem 8%;
+    background-color: #333;
+    color: white;
+}
+
+.social-links a {
+    color: white;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.footer-bottom {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-content h1 {
+        font-size: 3rem;
+    }
+
+    .hero-images {
+        margin-top: 2rem;
+    }
+
+    .stats-section {
+        flex-direction: column;
+        gap: 2rem;
     }
 }
