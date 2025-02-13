@@ -6,65 +6,184 @@
     <title>Our Products - Delicious Cookies</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
 </head>
 <body>
     <nav>
         <ul>
+            <div class="logo">
+                <img src="assets/img/logo.png" alt="Delicious Cookies Logo">
+            </div>
             <div class="left-items">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="index.html#products">Our Cookies</a></li>
                 <li><a href="index.html#testimonials">Testimonials</a></li>
                 <li><a href="index.html#contact">Contact Us</a></li>
-                <li><a href="signup.html">Sign Up</a></li>
+                <li><a href="login.html">Login</a></li>
             </div>
             <li class="cart"><a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a></li>
         </ul>
     </nav>
 
-    <div class="container" id="products">
-        <h2>Our Cookies</h2>
-        <div class="products">
-            <div class="product">
-                <img src="/assets/img/BrownButterCCC-BP-12-1.webp" alt="Chocolate Chip Cookies">
-                <h3>Chocolate Chip</h3>
-                <p>$5.99 / dozen</p>
-                <button>Add To Cart</button>
+    <div class="products-hero">
+        <h1>Our Cookie Collection</h1>
+        <p>Handcrafted with love, baked fresh daily</p>
+    </div>
+
+    <div class="container">
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all">All Cookies</button>
+            <button class="filter-btn" data-filter="classic">Classic</button>
+            <button class="filter-btn" data-filter="specialty">Specialty</button>
+            <button class="filter-btn" data-filter="seasonal">Seasonal</button>
+        </div>
+
+        <div class="products-grid">
+            <div class="product-card" data-category="classic">
+                <div class="product-image">
+                    <img src="assets/img/BrownButterCCC-BP-12-1.webp" alt="Chocolate Chip Cookies">
+                    <div class="product-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>Chocolate Chip</h3>
+                    <p class="product-description">Our signature cookie made with premium chocolate chips</p>
+                    <div class="product-footer">
+                        <span class="price">$5.99 / dozen</span>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="product">
-                <img src="assets/img/oatmeal-raisin-cookies.jpg" alt="Oatmeal Raisin Cookies">
-                <h3>Oatmeal Raisin</h3>
-                <p>$6.49 / dozen</p>
-                <button>Add To Cart</button>
+            <div class="product-card" data-category="classic">
+                <div class="product-image">
+                    <img src="assets/img/oatmeal-raisin-cookies.jpg" alt="Oatmeal Raisin Cookies">
+                    <div class="product-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>Oatmeal Raisin</h3>
+                    <p class="product-description">A classic combination of oats and raisins</p>
+                    <div class="product-footer">
+                        <span class="price">$6.49 / dozen</span>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="product">
-                <img src="assets/img/SugarCookiesRecipe.webp" alt="Sugar Cookies">
-                <h3>Sugar Cookies</h3>
-                <p>$5.49 / dozen</p>
-                <button>Add To Cart</button>
+            <div class="product-card" data-category="classic">
+                <div class="product-image">
+                    <img src="assets/img/SugarCookiesRecipe.webp" alt="Sugar Cookies">
+                    <div class="product-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>Sugar Cookies</h3>
+                    <p class="product-description">A soft and sweet cookie perfect for sharing</p>
+                    <div class="product-footer">
+                        <span class="price">$5.49 / dozen</span>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="product">
-                <img src="assets/img/ChocolateChocolateChipCookies-BP-1.webp" alt="Double Chocolate Chip">
-                <h3>Double Chocolate Chip</h3>
-                <p>$6.99 / dozen</p>
-                <button>Add To Cart</button>
+            <div class="product-card" data-category="specialty">
+                <div class="product-image">
+                    <img src="assets/img/ChocolateChocolateChipCookies-BP-1.webp" alt="Double Chocolate Chip">
+                    <div class="product-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>Double Chocolate Chip</h3>
+                    <p class="product-description">A rich and indulgent chocolate cookie</p>
+                    <div class="product-footer">
+                        <span class="price">$6.99 / dozen</span>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="product">
-                <img src="assets/img/peanut-butter-cookies.webp" alt="Peanut Butter Cookies">
-                <h3>Peanut Butter</h3>
-                <p>$5.99 / dozen</p>
-                <button>Add To Cart</button>
+            <div class="product-card" data-category="specialty">
+                <div class="product-image">
+                    <img src="assets/img/peanut-butter-cookies.webp" alt="Peanut Butter Cookies">
+                    <div class="product-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>Peanut Butter</h3>
+                    <p class="product-description">A classic peanut butter cookie</p>
+                    <div class="product-footer">
+                        <span class="price">$5.99 / dozen</span>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="product">
-                <img src="assets/img/macadamia-nut-cookies.webp" alt="White Chocolate Macadamia">
-                <h3>White Chocolate Macadamia</h3>
-                <p>$7.49 / dozen</p>
-                <button>Add To Cart</button>
+            <div class="product-card" data-category="specialty">
+                <div class="product-image">
+                    <img src="assets/img/macadamia-nut-cookies.webp" alt="White Chocolate Macadamia">
+                    <div class="product-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>White Chocolate Macadamia</h3>
+                    <p class="product-description">A sweet and nutty cookie with white chocolate</p>
+                    <div class="product-footer">
+                        <span class="price">$7.49 / dozen</span>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <div class="newsletter-section">
+        <div class="newsletter-content">
+            <h2>Stay Updated</h2>
+            <p>Subscribe to receive special offers and cookie updates!</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email">
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </div>
+
     <footer>
-        <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Delicious Cookies</h3>
+                <p>Baking happiness since 1995</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: info@deliciouscookies.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
+        </div>
     </footer>
 </body>
 </html> 
