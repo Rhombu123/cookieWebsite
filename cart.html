@@ -3,68 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout Page</title>
+    <title>Shopping Cart - Delicious Cookies</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
 </head>
 <body>
-    <div class="checkout-container">
-        <div class="checkout-form">
-            <h2>Checkout</h2>
-            <form>
-                <!-- Shipping Information -->
-                <h3>Shipping Information</h3>
-                <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" id="address" required>
-                </div>
-                <div class="form-group">
-                    <label for="city">City</label>
-                    <input type="text" id="city" required>
-                </div>
-                <div class="form-group">
-                    <label for="zipCode">ZIP Code</label>
-                    <input type="text" id="zipCode" required>
-                </div>
+    <nav>
+        <ul>
+            <div class="logo">
+                <img src="assets/img/logo.png" alt="Delicious Cookies Logo">
+            </div>
+            <div class="left-items">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Our Cookies</a></li>
+                <li><a href="shipping.html">Shipping & Delivery</a></li>
+                <li><a href="wholesale.html">Wholesale & Bulk Orders</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="login.html">Login</a></li>
+            </div>
+            <li class="cart"><a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+        </ul>
+    </nav>
 
-                <!-- Payment Information -->
-                <h3>Payment Information</h3>
-                <div class="form-group">
-                    <label for="cardNumber">Card Number</label>
-                    <input type="text" id="cardNumber" required>
-                </div>
-                <div class="form-group">
-                    <label for="expiryDate">Expiry Date</label>
-                    <input type="text" id="expiryDate" placeholder="MM/YY" required>
-                </div>
-                <div class="form-group">
-                    <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" required>
-                </div>
-
-                <button type="submit" style="background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
-                    Place Order
-                </button>
-            </form>
+    <div class="cart-container">
+        <div class="cart-header">
+            <h1>Your Shopping Cart</h1>
+            <p class="cart-count">0 Items</p>
         </div>
 
-        <div class="order-summary">
-            <h3>Order Summary</h3>
-            <div class="summary-item">
-                <p>Subtotal: $0.00</p>
-                <p>Shipping: $0.00</p>
-                <p>Tax: $0.00</p>
-                <hr>
-                <h4>Total: $0.00</h4>
-            </div>
+        <div class="empty-cart">
+            <i class="fas fa-shopping-basket"></i>
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added any cookies to your cart yet!</p>
+            <a href="products.html" class="browse-cookies-btn">
+                Browse Our Cookies <i class="fas fa-cookie-bite"></i>
+            </a>
         </div>
     </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Delicious Cookies</h3>
+                <p>Baking happiness since 1995</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: info@deliciouscookies.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
