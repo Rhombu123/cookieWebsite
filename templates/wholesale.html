@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wholesale & Bulk Orders - Delicious Cookies</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Delicious Cookies Logo">
+            </div>
+            <div class="left-items">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('products') }}">Our Cookies</a></li>
+                <li><a href="{{ url_for('shipping') }}">Shipping & Delivery</a></li>
+                <li><a href="{{ url_for('wholesale') }}">Wholesale & Bulk Orders</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            </div>
+            <li class="cart"><a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+        </ul>
+    </nav>
+
+    <div class="wholesale-container">
+        <h1>Wholesale & Bulk Orders</h1>
+
+        <section class="wholesale-section">
+            <h2>Why Choose Our Wholesale Program?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <i class="fas fa-percentage"></i>
+                    <h3>Competitive Pricing</h3>
+                    <p>Special discounts for bulk orders</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-box"></i>
+                    <h3>Custom Packaging</h3>
+                    <p>Branded packaging options available</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-truck"></i>
+                    <h3>Reliable Delivery</h3>
+                    <p>Scheduled deliveries to meet your needs</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="wholesale-section">
+            <h2>Who We Serve</h2>
+            <ul class="service-list">
+                <li>Cafes and Coffee Shops</li>
+                <li>Hotels and Restaurants</li>
+                <li>Corporate Events</li>
+                <li>Wedding Planners</li>
+                <li>Educational Institutions</li>
+                <li>Gift Shops</li>
+            </ul>
+        </section>
+
+        <section class="wholesale-section">
+            <h2>Minimum Orders</h2>
+            <p>Our wholesale program requires a minimum order of 100 cookies per variety. Custom orders and special requests are welcome.</p>
+        </section>
+
+        <section class="wholesale-section">
+            <h2>Get Started</h2>
+            <form class="wholesale-form">
+                <div class="form-group">
+                    <label for="business-name">Business Name</label>
+                    <input type="text" id="business-name" name="business-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact-name">Contact Name</label>
+                    <input type="text" id="contact-name" name="contact-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="business-email">Business Email</label>
+                    <input type="email" id="business-email" name="business-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Tell us about your needs</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="submit-button">Submit Inquiry</button>
+            </form>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Delicious Cookies</h3>
+                <p>Baking happiness since 1995</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: info@deliciouscookies.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 
