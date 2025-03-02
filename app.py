@@ -1,4 +1,6 @@
 from flask import Flask, render_template
+import sqlite3
+
 
 app = Flask(__name__)
 
@@ -37,5 +39,21 @@ def cart():
 def signup():
     return render_template('signup.html')
 
+def create_db():
+    conn = sqlite3.connect('db.sqlite')
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        first_name TEXT,
+                        last_name TEXT,
+                        email TEXT,
+                        password TEXT,
+                        phone_number TEXT CAN BE NULL,
+                        gets_newsletters BIT
+                        )''')
+    conn.commit()
+    conn.close()
+
 if __name__ == '__main__':
+    create_db()
     app.run(debug=True)
