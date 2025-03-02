@@ -2,7 +2,7 @@
 
 A delightful e-commerce website dedicated to selling artisanal, freshly-baked cookies. Our platform offers a seamless shopping experience for cookie enthusiasts to browse, order, and enjoy premium quality cookies delivered right to their doorstep.
 
-#Setup instructions (how to run it locally)
+### Setup instructions (how to run it locally)
 1. Clone the repository
        Open your terminal or command prompt and run the following command to clone the repository to your local machine:
         git clone (repository link), this will create a local copy of the repository.
@@ -26,9 +26,7 @@ A delightful e-commerce website dedicated to selling artisanal, freshly-baked co
        Now that everything is set up, you can start the Flask development server. Run the following command:
         flask run
 
-#How to use the App
-
-
+### How to use the App
 
 1. Browse Cookies: When you visit the homepage, you can view a list of all available cookies along with their descriptions and prices.
 
@@ -42,7 +40,7 @@ A delightful e-commerce website dedicated to selling artisanal, freshly-baked co
 
 #Screenshots
 
-Here are some screenshots of the working project:
+#### Here are some screenshots of the working project:
 
 
 
