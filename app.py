@@ -1,6 +1,11 @@
 from flask import Flask, render_template
 import sqlite3
+import base64
+from hashlib import sha256
 
+def hash_password(password):
+    encoded_hash = base64.b64encode(sha256(password).digest())
+    return encoded_hash.decode()
 
 app = Flask(__name__)
 
@@ -42,15 +47,53 @@ def signup():
 def create_db():
     conn = sqlite3.connect('db.sqlite')
     cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+    cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS users (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         first_name TEXT,
                         last_name TEXT,
                         email TEXT,
-                        password TEXT,
+                        password_hash TEXT,
                         phone_number TEXT CAN BE NULL,
                         gets_newsletters BIT
-                        )''')
+                    );
+                    ''')
+    conn.commit()
+    cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS cookies (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT,
+                        description TEXT,
+                        price REAL,
+                        image_url TEXT,
+                        category TEXT
+                    );
+                    ''')
+    conn.commit()
+    cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS cart_items (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER,
+                        cookie_id INTEGER,
+                        quantity INTEGER,
+                        FOREIGN KEY (user_id) REFERENCES users (id),
+                        FOREIGN KEY (cookie_id) REFERENCES cookies (id)
+                    );
+                    ''')
+    conn.commit()
+    cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS orders (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER,
+                        cookie_id INTEGER,
+                        quantity INTEGER,
+                        total_price REAL,
+                        order_date DATETIME,
+                        status TEXT,
+                        FOREIGN KEY (user_id) REFERENCES users (id),
+                        FOREIGN KEY (cookie_id) REFERENCES cookies (id)
+                    );
+                    ''')
     conn.commit()
     conn.close()
 
