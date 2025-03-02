@@ -1,10 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import sqlite3
 import base64
 from hashlib import sha256
 
 def hash_password(password):
-    encoded_hash = base64.b64encode(sha256(password).digest())
+    encoded_string = password.encode('utf-8')
+    encoded_hash = base64.b64encode(sha256(encoded_string).digest())
     return encoded_hash.decode()
 
 app = Flask(__name__)
@@ -40,9 +41,44 @@ def cart():
     cart_count = len(cart_items)
     return render_template('cart.html', cart_items=cart_items, cart_count=cart_count)
 
+@app.route('/create_user', methods = ['POST', 'GET'])
+def create_user():
+    try:
+        first_name = request.form['first-name']
+        last_name = request.form['last-name']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm-password']
+        phone = request.form['phone']
+        newsletter = request.form['newsletter']
+
+        if password != confirm_password:
+            return render_template('signup.html', msg='Passwords do not match')
+
+        with sqlite3.connect('db.sqlite') as conn:
+            password_hash = hash_password(password)
+
+            cursor = conn.cursor()
+            cursor.execute('''
+                        INSERT INTO users (
+                            first_name, last_name, email, password_hash, phone_number, gets_newsletters
+                        ) VALUES (?,?,?,?,?,?)''', (first_name, last_name, email, password_hash, phone, newsletter))
+            conn.commit()
+            target = 'thank_you.html'
+            msg = ''
+    except Exception as e:
+        conn.rollback()
+        target = 'signup.html'
+        # msg = 'An internal error occurred while processing your request'
+        msg = 'Error: ' + str(e)
+    finally:
+        conn.close()
+        return render_template(target, msg=msg)
+
+
 @app.route('/signup')
 def signup():
-    return render_template('signup.html')
+    return render_template('signup.html', msg='')
 
 def create_db():
     conn = sqlite3.connect('db.sqlite')
