@@ -30,9 +30,45 @@ def wholesale():
 def contact():
     return render_template('contact.html')
 
-@app.route('/login')
+@app.route('/login', methods = ['POST', 'GET'])
 def login():
-    return render_template('login.html')
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        try:
+            email = request.form['email']
+            password = request.form['password']
+
+            with sqlite3.connect('db.sqlite') as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                                    SELECT id, first_name, last_name, email, password_hash, phone_number, gets_newsletters 
+                                        FROM users 
+                                        WHERE email = ?
+                                        LIMIT 1
+                                    ''', [email])
+                conn.commit()
+                results = cursor.fetchall()
+                
+                if len(results) == 0:
+                    target = 'login.html'
+                    msg = 'Invalid email or password'
+                else:
+                    user = results.pop()
+                    password_hash = hash_password(password)
+
+                    if user[4] == password_hash:
+                        target = 'index.html'
+                        msg = ''
+                    else:
+                        target = 'login.html'
+                        msg = 'Invalid email or password'
+        except Exception as e:
+            target = 'login.html'
+            msg = 'Error: ' + str(e)
+        finally:
+            conn.close()
+            return render_template(target, msg=msg)
 
 @app.route('/cart')
 def cart():
