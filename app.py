@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 import sqlite3
 import base64
 from hashlib import sha256
@@ -35,6 +35,7 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     else:
+        cookies = []
         try:
             email = request.form['email']
             password = request.form['password']
@@ -60,6 +61,7 @@ def login():
                     if user[4] == password_hash:
                         target = 'index.html'
                         msg = ''
+                        cookies.append(('sessionId', str(user[0])))
                     else:
                         target = 'login.html'
                         msg = 'Invalid email or password'
@@ -68,7 +70,13 @@ def login():
             msg = 'Error: ' + str(e)
         finally:
             conn.close()
-            return render_template(target, msg=msg)
+
+            response = make_response(render_template(target, msg=msg))
+            if len(cookies) > 0:
+                for cookie in cookies:
+                    response.set_cookie(cookie[0], cookie[1], samesite='strict')
+
+            return response
 
 @app.route('/cart')
 def cart():
