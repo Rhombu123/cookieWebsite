@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session,flash
 import sqlite3
 import base64
 from hashlib import sha256
@@ -9,6 +9,7 @@ def hash_password(password):
     return encoded_hash.decode()
 
 app = Flask(__name__)
+app.secret_key = 'test'
 
 @app.route('/')
 def home():
@@ -30,9 +31,40 @@ def wholesale():
 def contact():
     return render_template('contact.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        print(request.form)
+        email= request.form['email']
+        password = request.form['password']
+        password_hash = hash_password(password)
+        with sqlite3.connect('db.sqlite') as con:
+            cursor = con.cursor()
+            cursor.execute('SELECT first_name, last_name FROM users WHERE email = ? AND password_hash = ?',
+                           (email, password_hash))
+            user = cursor.fetchone()
+        if user:
+             # User found, store user details in session
+             session['first_name'] = user[0]
+             session['last_name'] = user[1]
+             print(f"Session data; {session}")
+             return redirect(url_for('welcome'))  # Redirect to a welcome page
+        else:
+            flash('Invalid email or password', 'danger')
+            return render_template('login.html')
+
     return render_template('login.html')
+
+@app.route('/welcome')
+def welcome():
+    if 'first_name' in session and 'last_name' in session:
+       # Retrieve data from session
+        first_name = session['first_name']
+        last_name = session['last_name']
+       # Pass them to the template
+        return render_template("welcome.html", first_name=first_name, last_name=last_name)
+
+    return redirect(url_for('login'))  # Redirect to login if no session exists
 
 @app.route('/cart')
 def cart():
