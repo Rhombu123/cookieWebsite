@@ -54,7 +54,6 @@ def login():
             return render_template('login.html')
 
     return render_template('login.html')
-
 @app.route('/welcome')
 def welcome():
     if 'first_name' in session and 'last_name' in session:

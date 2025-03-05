@@ -6,6 +6,39 @@
     <title>Login - Delicious Cookies</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Popup container */
+        .popup-container {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000;
+        }
+
+        .popup-container.active {
+            display: block; /* Show the popup */
+        }
+
+        .popup-container button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .popup-container button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
 </head>
 <body>
     <nav>
@@ -25,8 +58,9 @@
             <li class="cart"><a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
         </ul>
     </nav>
+
     <div class="login-container">
-        <form class="login-form">
+        <form class="login-form" action="{{ url_for('login') }}" method="POST">
             <h2>Login</h2>
             <div class="form-group">
                 <label for="email">Email</label>
@@ -45,8 +79,14 @@
                 <a href="#" class="forgot-password">Forgot Password?</a>
             </div>
             <button type="submit" class="login-button">Login</button>
-            <p class="signup-link">Don't have an account? <a href="signup.html">Sign up</a></p>
+            <p class="signup-link">Don't have an account? <a href="{{  url_for('signup' ) }}">Sign up</a></p>
         </form>
+    </div>
+
+    <!-- Flash message popup -->
+    <div class="popup-container" id="popup-container">
+        <p id="popup-message"></p>
+        <button onclick="closePopup()">Close</button>
     </div>
 
     <footer>
@@ -65,5 +105,21 @@
             <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
         </div>
     </footer>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script type="text/javascript">
+                // Display the popup with the flash message
+                document.getElementById('popup-message').innerText = "{{ messages[0] }}";
+                document.getElementById('popup-container').classList.add('active');
+            </script>
+        {% endif %}
+    {% endwith %}
+
+    <script>
+        function closePopup() {
+            document.getElementById('popup-container').classList.remove('active');
+        }
+    </script>
 </body>
 </html>

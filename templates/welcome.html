@@ -30,8 +30,8 @@
     <div class="thank-you-container">
         <div class="thank-you-content">
             <i class="fas fa-check-circle"></i>
-            <h1>Thank You for Signing Up!</h1>
-            <p>Welcome to the Delicious Cookies family! Your account has been successfully created.</p>
+        <h1>Welcome to Delicious Cookies family!</h1>
+            <br> <h1> {{ first_name }} {{ last_name }} !</h1>
             {% if email %}
             <p class="confirmation-email">A confirmation email has been sent to {{ email }}</p>
             {% endif %}
@@ -44,9 +44,8 @@
                 </ul>
             </div>
             <div class="action-buttons">
-                <a href="{{ url_for('login') }}" class="primary-btn">Login</a>
-                <a href="{{ url_for('products') }}" class="secondary-btn">Shop as guess</a>
-                <a href="{{ url_for('home') }}" class="secondary-btn">Return Home</a>
+                <a href="{{ url_for('products') }}" class="primary-btn">Shop now</a>
+
             </div>
         </div>
     </div>
@@ -68,4 +67,4 @@
         </div>
     </footer>
 </body>
-</html> 
+</html>
