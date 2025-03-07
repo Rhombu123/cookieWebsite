@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session,fl
 import sqlite3
 import base64
 from hashlib import sha256
+import csv
 
 def hash_password(password):
     encoded_string = password.encode('utf-8')
@@ -43,6 +44,7 @@ def login():
             cursor.execute('SELECT first_name, last_name FROM users WHERE email = ? AND password_hash = ?',
                            (email, password_hash))
             user = cursor.fetchone()
+            con.close()
         if user:
              # User found, store user details in session
              session['first_name'] = user[0]
@@ -164,6 +166,66 @@ def create_db():
     conn.commit()
     conn.close()
 
+# DANGER: USE SPARINGLY! Make sure to clean up any lingering foreign keys before using this
+def reset_cookies():
+    try:
+        with sqlite3.connect("db.sqlite") as conn:
+            cursor = conn.cursor()
+
+            cursor.execute('''DELETE FROM cookies''')
+            conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print("Failed to purge cookies table: " + str(e))
+    finally:
+        conn.close()
+
+def read_csv():
+    try:
+        with open("cookies_table.csv", 'r') as file_reader:
+            reader = csv.reader(file_reader)
+            output = list(reader)
+    except Exception as e:
+        print("Error processing cookies_table.csv: " + str(e))
+        output = []
+    finally:
+        file_reader.close()
+        return output
+
+def seed_cookies():
+    try:
+        with sqlite3.connect("db.sqlite") as conn:
+            cursor = conn.cursor()
+
+            cursor.execute('''SELECT COUNT(*) FROM cookies''')
+            conn.commit()
+
+            result = cursor.fetchone()
+
+            count = int(result[0])
+
+            if count <= 0:
+                cookies = read_csv()
+                if len(cookies) > 0:
+                    for name, desc, price, img_url, cat in cookies:
+                        cursor.execute('''
+                                        INSERT INTO cookies (
+                                            name, description, price, image_url, category
+                                        ) VALUES (?,?,?,?,?); ''', [name, desc, price, img_url, cat])
+                        conn.commit()
+                    print("Cookies seeded")
+                else:
+                    print("No cookies to seed")
+            else:
+                print("Cookies already seeded")
+    except Exception as e:
+        conn.rollback()
+        print("Error seeding cookies: " + str(e))
+    finally:
+        conn.close()
+
 if __name__ == '__main__':
     create_db()
+    # reset_cookies()
+    seed_cookies()
     app.run(debug=True)
