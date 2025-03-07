@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, redirect, url_for, session,flash
 import sqlite3
 import base64
 from hashlib import sha256
@@ -9,6 +9,7 @@ def hash_password(password):
     return encoded_hash.decode()
 
 app = Flask(__name__)
+app.secret_key = 'test'
 
 @app.route('/')
 def home():
@@ -30,53 +31,39 @@ def wholesale():
 def contact():
     return render_template('contact.html')
 
-@app.route('/login', methods = ['POST', 'GET'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        return render_template('login.html')
-    else:
-        cookies = []
-        try:
-            email = request.form['email']
-            password = request.form['password']
+    if request.method == 'POST':
+        print(request.form)
+        email= request.form['email']
+        password = request.form['password']
+        password_hash = hash_password(password)
+        with sqlite3.connect('db.sqlite') as con:
+            cursor = con.cursor()
+            cursor.execute('SELECT first_name, last_name FROM users WHERE email = ? AND password_hash = ?',
+                           (email, password_hash))
+            user = cursor.fetchone()
+        if user:
+             # User found, store user details in session
+             session['first_name'] = user[0]
+             session['last_name'] = user[1]
+             print(f"Session data; {session}")
+             return redirect(url_for('welcome'))  # Redirect to a welcome page
+        else:
+            flash('Invalid email or password', 'danger')
+            return render_template('login.html')
 
-            with sqlite3.connect('db.sqlite') as conn:
-                cursor = conn.cursor()
-                cursor.execute('''
-                                    SELECT id, first_name, last_name, email, password_hash, phone_number, gets_newsletters 
-                                        FROM users 
-                                        WHERE email = ?
-                                        LIMIT 1
-                                    ''', [email])
-                conn.commit()
-                results = cursor.fetchall()
-                
-                if len(results) == 0:
-                    target = 'login.html'
-                    msg = 'Invalid email or password'
-                else:
-                    user = results.pop()
-                    password_hash = hash_password(password)
+    return render_template('login.html')
+@app.route('/welcome')
+def welcome():
+    if 'first_name' in session and 'last_name' in session:
+       # Retrieve data from session
+        first_name = session['first_name']
+        last_name = session['last_name']
+       # Pass them to the template
+        return render_template("welcome.html", first_name=first_name, last_name=last_name)
 
-                    if user[4] == password_hash:
-                        target = 'index.html'
-                        msg = ''
-                        cookies.append(('sessionId', str(user[0])))
-                    else:
-                        target = 'login.html'
-                        msg = 'Invalid email or password'
-        except Exception as e:
-            target = 'login.html'
-            msg = 'Error: ' + str(e)
-        finally:
-            conn.close()
-
-            response = make_response(render_template(target, msg=msg))
-            if len(cookies) > 0:
-                for cookie in cookies:
-                    response.set_cookie(cookie[0], cookie[1], samesite='strict')
-
-            return response
+    return redirect(url_for('login'))  # Redirect to login if no session exists
 
 @app.route('/cart')
 def cart():
