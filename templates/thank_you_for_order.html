@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Delicious Cookies</title>
+    <title>Thank You - Delicious Cookies</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
@@ -27,38 +27,16 @@
         </ul>
     </nav>
 
-    <div class="cart-container">
-        <div class="cart-header">
-            <h1>Your Shopping Cart</h1>
-            <p class="cart-count">{{ cart_items|length  }} Items</p>
-        </div>
-
-           {% if cart_items %}
-            <div class="cart-items">
-                {% for item in cart_items %}
-                <div class="cart-item">
-                    <p><strong>{{ item.name }}</strong></p>
-                    <p>Price: ${{ "%.2f" % item.price }} / dozen</p>
-                    <p>Quantity: {{ item.quantity }} dozen(s)</p>
-
-                </div>
-                {% endfor %}
-            </div>
-
-            <div class="cart-items">
-                <h2 class="total">Total: ${{ "%.2f" % total }}</h2>
-                <a href="{{ url_for('checkout') }}" class="checkout-btn" target="_blank">Checkout</a>
-            </div>
-        {% else %}
-        <div class="empty-cart">
-            <i class="fas fa-shopping-basket"></i>
-            <h2>Your cart is empty</h2>
-            <p>Looks like you haven't added any cookies to your cart yet!</p>
-            <a href="{{ url_for('products') }}" class="browse-cookies-btn">
-                Browse Our Cookies <i class="fas fa-cookie-bite"></i>
+    <div class="thank-you-for-your-purchase">
+        <div class="thank-you-content">
+            <i class="fas fa-check-circle" style="color: green; font-size: 100px;"></i>
+            <h1>Thank You for Your Purchase!</h1>
+            <p>A confirmation email has been sent to <strong>{{ email }}</strong>.</p>
+            <p>We hope you enjoy your cookies! For further details, check your email inbox.</p>
+            <a href="{{ url_for('products') }}" class="continue-shopping-btn">
+                Continue Shopping <i class="fas fa-cookie-bite"></i>
             </a>
         </div>
-        {% endif %}
     </div>
 
     <footer>

@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Delicious Cookies</title>
+    <title>{{ title or "Delicious Cookies" }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* Popup container */
+        /* Popup container styling */
         .popup-container {
             display: none; /* Hidden by default */
             position: fixed;
@@ -43,6 +42,7 @@
 </head>
 <body>
     <nav>
+        <!-- Navbar -->
         <ul>
             <div class="logo">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Delicious Cookies Logo">
@@ -60,38 +60,20 @@
         </ul>
     </nav>
 
-    <div class="login-container">
-        <form class="login-form" action="{{ url_for('login') }}" method="POST">
-            <h2>Login</h2>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="remember-me">
-                <label>
-                    <input type="checkbox" name="remember"> Remember me
-                </label>
-            </div>
-            <div class="forgot-password-container">
-                <a href="#" class="forgot-password">Forgot Password?</a>
-            </div>
-            <button type="submit" class="login-button">Login</button>
-            <p class="signup-link">Don't have an account? <a href="{{  url_for('signup' ) }}">Sign up</a></p>
-        </form>
-        <span style="color:red" id="message">{{ msg }}</span>
-    </div>
-
-    <!-- Flash message popup -->
+    <!-- Popup for flash messages -->
     <div class="popup-container" id="popup-container">
         <p id="popup-message"></p>
         <button onclick="closePopup()">Close</button>
     </div>
 
+    <!-- Page content -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
     <footer>
+        <!-- Footer -->
         <div class="footer-content">
             <div class="footer-section">
                 <h3>Delicious Cookies</h3>

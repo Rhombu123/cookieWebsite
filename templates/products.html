@@ -53,9 +53,20 @@
                     <p class="product-description">Our signature cookie made with premium chocolate chips</p>
                     <div class="product-footer">
                         <span class="price">$5.99 / dozen</span>
-                        <button class="add-to-cart-btn">
+                         <form action="{{ url_for('add_to_cart') }}" method="POST">
+                        <input type="hidden" name="cookie_name" value="Chocolate Chip">
+                        <input type="hidden" name="cookie_price" value="5.99">
+                        <label for="quantity">Quantity:</label>
+                        <select name="quantity">
+                            <option value="1">1 dozen</option>
+                            <option value="2">2 dozen</option>
+                            <option value="3">3 dozen</option>
+                            <option value="4">4 dozen</option>
+                                  </select>
+                              <button class="add-to-cart-btn" type="submit">
                             <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
+                              </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -71,9 +82,20 @@
                     <p class="product-description">A classic combination of oats and raisins</p>
                     <div class="product-footer">
                         <span class="price">$6.49 / dozen</span>
-                        <button class="add-to-cart-btn">
+                        <form action="{{ url_for('add_to_cart') }}" method="POST">
+                        <input type="hidden" name="cookie_name" value="Oatmeal Raisin">
+                        <input type="hidden" name="cookie_price" value="6.49">
+                        <label for="quantity">Quantity:</label>
+                        <select name="quantity">
+                            <option value="1">1 dozen</option>
+                            <option value="2">2 dozen</option>
+                            <option value="3">3 dozen</option>
+                            <option value="4">4 dozen</option>
+                                  </select>
+                              <button class="add-to-cart-btn" type="submit">
                             <i class="fas fa-shopping-cart"></i> Add to Cart
                         </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -89,9 +111,20 @@
                     <p class="product-description">A soft and sweet cookie perfect for sharing</p>
                     <div class="product-footer">
                         <span class="price">$5.49 / dozen</span>
-                        <button class="add-to-cart-btn">
+                            <form action="{{ url_for('add_to_cart') }}" method="POST">
+                        <input type="hidden" name="cookie_name" value="Sugar Cookies">
+                        <input type="hidden" name="cookie_price" value="5.49">
+                        <label for="quantity">Quantity:</label>
+                        <select name="quantity">
+                            <option value="1">1 dozen</option>
+                            <option value="2">2 dozen</option>
+                            <option value="3">3 dozen</option>
+                            <option value="4">4 dozen</option>
+                                  </select>
+                              <button class="add-to-cart-btn" type="submit">
                             <i class="fas fa-shopping-cart"></i> Add to Cart
                         </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -107,9 +140,20 @@
                     <p class="product-description">A rich and indulgent chocolate cookie</p>
                     <div class="product-footer">
                         <span class="price">$6.99 / dozen</span>
-                        <button class="add-to-cart-btn">
+                        <form action="{{ url_for('add_to_cart') }}" method="POST">
+                        <input type="hidden" name="cookie_name" value="Double Chocolate Chip">
+                        <input type="hidden" name="cookie_price" value="6.99">
+                        <label for="quantity">Quantity:</label>
+                        <select name="quantity">
+                            <option value="1">1 dozen</option>
+                            <option value="2">2 dozen</option>
+                            <option value="3">3 dozen</option>
+                            <option value="4">4 dozen</option>
+                                  </select>
+                              <button class="add-to-cart-btn" type="submit">
                             <i class="fas fa-shopping-cart"></i> Add to Cart
                         </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -125,9 +169,20 @@
                     <p class="product-description">A classic peanut butter cookie</p>
                     <div class="product-footer">
                         <span class="price">$5.99 / dozen</span>
-                        <button class="add-to-cart-btn">
+                        <form action="{{ url_for('add_to_cart') }}" method="POST">
+                        <input type="hidden" name="cookie_name" value="Peanut Butter">
+                        <input type="hidden" name="cookie_price" value="5.99">
+                        <label for="quantity">Quantity:</label>
+                        <select name="quantity">
+                            <option value="1">1 dozen</option>
+                            <option value="2">2 dozen</option>
+                            <option value="3">3 dozen</option>
+                            <option value="4">4 dozen</option>
+                                  </select>
+                              <button class="add-to-cart-btn" type="submit">
                             <i class="fas fa-shopping-cart"></i> Add to Cart
                         </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -143,9 +198,21 @@
                     <p class="product-description">A sweet and nutty cookie with white chocolate</p>
                     <div class="product-footer">
                         <span class="price">$7.49 / dozen</span>
-                        <button class="add-to-cart-btn">
+                        <form action="{{ url_for('add_to_cart') }}" method="POST">
+                        <input type="hidden" name="cookie_name" value="White Chocolate Macadamia">
+                        <input type="hidden" name="cookie_price" value="7.49">
+                        <label for="quantity">Quantity:</label>
+                        <select name="quantity">
+                            <option value="1">1 dozen</option>
+                            <option value="2">2 dozen</option>
+                            <option value="3">3 dozen</option>
+                            <option value="4">4 dozen</option>
+                                  </select>
+
+                              <button class="add-to-cart-btn" type="submit">
                             <i class="fas fa-shopping-cart"></i> Add to Cart
                         </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -208,6 +275,19 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% extends "base.html" %}
+
+{% block content %}
+<h1>Our Cookies</h1>
+<form action="{{ url_for('add_to_cart') }}" method="POST">
+    <input type="hidden" name="cookie_name" value="Chocolate Chip">
+    <input type="hidden" name="cookie_price" value="5.99">
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" value="1" min="1">
+    <button type="submit">Add to Cart</button>
+</form>
+{% endblock %}
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html> 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Delicious Cookies</title>
+    <title>Checkout - Delicious Cookies</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
@@ -27,38 +27,32 @@
         </ul>
     </nav>
 
-    <div class="cart-container">
-        <div class="cart-header">
-            <h1>Your Shopping Cart</h1>
-            <p class="cart-count">{{ cart_items|length  }} Items</p>
-        </div>
-
-           {% if cart_items %}
-            <div class="cart-items">
-                {% for item in cart_items %}
-                <div class="cart-item">
-                    <p><strong>{{ item.name }}</strong></p>
-                    <p>Price: ${{ "%.2f" % item.price }} / dozen</p>
-                    <p>Quantity: {{ item.quantity }} dozen(s)</p>
-
-                </div>
-                {% endfor %}
+    <div class="checkout-container">
+        <h1>Checkout</h1>
+        <form action="{{ url_for('process_payment') }}" method="POST" class="checkout-form">
+            <div class="form-group">
+                <label for="full-name">Full Name</label>
+                <input type="text" id="full-name" name="full_name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Shipping Address</label>
+                <textarea id="address" name="address" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="payment-method">Payment Method</label>
+                <select id="payment-method" name="payment_method" required>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                </select>
             </div>
 
-            <div class="cart-items">
-                <h2 class="total">Total: ${{ "%.2f" % total }}</h2>
-                <a href="{{ url_for('checkout') }}" class="checkout-btn" target="_blank">Checkout</a>
-            </div>
-        {% else %}
-        <div class="empty-cart">
-            <i class="fas fa-shopping-basket"></i>
-            <h2>Your cart is empty</h2>
-            <p>Looks like you haven't added any cookies to your cart yet!</p>
-            <a href="{{ url_for('products') }}" class="browse-cookies-btn">
-                Browse Our Cookies <i class="fas fa-cookie-bite"></i>
-            </a>
-        </div>
-        {% endif %}
+            <button type="submit" class="checkout-submit-btn">Complete Purchase</button>
+        </form>
     </div>
 
     <footer>

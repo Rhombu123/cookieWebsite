@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, request, redirect, url_for, session,flash
 import sqlite3
 import base64
@@ -10,7 +12,8 @@ def hash_password(password):
     return encoded_hash.decode()
 
 app = Flask(__name__)
-app.secret_key = 'test'
+app.secret_key = os.urandom(24)
+app.config['SESSION_PERMANENT'] = False
 
 @app.route('/')
 def home():
@@ -32,6 +35,59 @@ def wholesale():
 def contact():
     return render_template('contact.html')
 
+@app.route('/clear_cart')
+def clear_cart():
+    session.pop('cart', None)  # Remove the cart key from the session
+    flash("Cart has been cleared.", "info")
+    return redirect(url_for('cart'))
+
+@app.before_request
+def clear_cart_on_first_visit():
+    # Check if a specific key in the session indicates the user has visited before.
+    if 'app_first_run' not in session:
+        session.pop('cart', None)
+        session['app_first_run'] = True
+        session.modified = True
+
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    if 'first_name' not in session:
+        flash("You need to log in before adding items to the cart.", "danger")
+        return redirect(url_for('login'))
+
+    # Get item details from the POST request
+    cookie_name = request.form.get('cookie_name')
+    cookie_price = float(request.form.get('cookie_price'))
+    quantity = int(request.form.get('quantity', 1))
+
+    # Retrieve cart from session or initialize it
+    if 'cart' not in session:
+        session['cart'] = []
+
+    cart = session['cart']
+
+    # Check if the item already exists in the cart, update quantity if true
+    item_found = False
+    for item in cart:
+        if item['name'] == cookie_name:
+            item['quantity'] += quantity
+            item_found = True
+            break
+
+    if not item_found:
+        # Add new item to the cart
+        cart.append({
+            'name': cookie_name,
+            'price': cookie_price,
+            'quantity': quantity
+        })
+
+    # Save the updated cart back to session
+    session['cart'] = cart
+    flash(f"{cookie_name} added to your cart!", "success")
+    return redirect(url_for('products'))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -44,7 +100,7 @@ def login():
             cursor.execute('SELECT first_name, last_name FROM users WHERE email = ? AND password_hash = ?',
                            (email, password_hash))
             user = cursor.fetchone()
-            con.close()
+
         if user:
              # User found, store user details in session
              session['first_name'] = user[0]
@@ -69,10 +125,31 @@ def welcome():
 
 @app.route('/cart')
 def cart():
-    # This is a placeholder - you'll need to implement actual cart functionality
-    cart_items = []  # This will come from your database or session
-    cart_count = len(cart_items)
-    return render_template('cart.html', cart_items=cart_items, cart_count=cart_count)
+   if 'cart' not in session or not session['cart']:
+       # Empty cart
+        return render_template('cart.html', cart_items=[], total=0)
+
+   cart_items = session['cart']
+   # Calculate total cost
+   total = sum(item['price'] * item['quantity'] for item in cart_items)
+
+   return render_template('cart.html', cart_items=cart_items, total=total)
+
+@app.route('/checkout', methods=['GET', 'POST'])
+def checkout():
+    return render_template('checkout.html')
+
+@app.route('/process_payment', methods=['POST'])
+def process_payment():
+    # Process the form data here
+    full_name = request.form.get('full_name')
+    email = request.form.get('email')
+    address = request.form.get('address')
+    payment_method = request.form.get('payment_method')
+
+    # Add logic for saving data or processing payment here
+    return render_template('thank_you_for_order.html', email=email)
+
 
 @app.route('/create_user', methods = ['POST', 'GET'])
 def create_user():
