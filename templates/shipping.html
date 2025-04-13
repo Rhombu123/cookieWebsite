@@ -1,92 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shipping & Delivery - Delicious Cookies</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
-</head>
-<body>
-    <nav>
-        <ul>
-            <div class="logo">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Delicious Cookies Logo">
-            </div>
-            <div class="left-items">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('products') }}">Our Cookies</a></li>
-                <li><a href="{{ url_for('shipping') }}">Shipping & Delivery</a></li>
-                <li><a href="{{ url_for('wholesale') }}">Wholesale & Bulk Orders</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-            </div>
-            <li class="cart"><a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
-        </ul>
-    </nav>
+{% extends "base.html" %}
 
+{% block content %}
     <div class="shipping-container">
-        <h1>Shipping & Delivery Information</h1>
+        <h1>Shipping & Delivery</h1>
         
-        <section class="shipping-section">
-            <h2>Delivery Areas</h2>
-            <p>We currently deliver to all 50 states in the United States.</p>
-        </section>
-
-        <section class="shipping-section">
-            <h2>Shipping Methods</h2>
+        <div class="shipping-section">
+            <h2>Delivery Options</h2>
             <div class="shipping-options">
                 <div class="shipping-option">
                     <h3>Standard Shipping</h3>
-                    <p>3-5 business days</p>
+                    <p>2-3 business days</p>
                     <p>$5.99</p>
                 </div>
                 <div class="shipping-option">
                     <h3>Express Shipping</h3>
-                    <p>2-3 business days</p>
+                    <p>1-2 business days</p>
                     <p>$9.99</p>
                 </div>
                 <div class="shipping-option">
-                    <h3>Next Day Delivery</h3>
-                    <p>Next business day</p>
+                    <h3>Same Day Delivery</h3>
+                    <p>Available for select zip codes</p>
                     <p>$14.99</p>
                 </div>
             </div>
-        </section>
-
-        <section class="shipping-section">
+            <p>All orders are processed within 24 hours of receipt. Orders placed during weekends or holidays will be processed on the next business day.</p>
+        </div>
+        
+        <div class="shipping-section">
             <h2>Freshness Guarantee</h2>
-            <p>All our cookies are baked fresh and carefully packaged to maintain their quality during shipping. We guarantee freshness for up to 7 days from delivery.</p>
-        </section>
-
-        <section class="shipping-section policies">
+            <p>At Delicious Cookies, we take pride in delivering the freshest cookies possible. Our cookies are:</p>
+            <ul>
+                <li>Baked fresh daily</li>
+                <li>Packaged in air-tight containers</li>
+                <li>Shipped with insulation to maintain freshness</li>
+                <li>Guaranteed to arrive in perfect condition</li>
+            </ul>
+            <p>If your cookies don't arrive in perfect condition, please contact us within 24 hours of delivery for a full refund or replacement.</p>
+        </div>
+        
+        <div class="shipping-section policies">
             <h2>Shipping Policies</h2>
             <ul>
-                <li>Orders are processed within 24 hours</li>
-                <li>Free shipping on orders over $50</li>
-                <li>Temperature-controlled packaging for summer months</li>
-                <li>Track your order through our website</li>
+                <li>We currently ship to all 50 U.S. states.</li>
+                <li>International shipping is available for select countries.</li>
+                <li>Free shipping on orders over $50 (Standard Shipping only).</li>
+                <li>Orders cannot be modified once placed. Please cancel and reorder if changes are needed.</li>
+                <li>During summer months, we may require Express Shipping for certain destinations to ensure freshness.</li>
             </ul>
-        </section>
+        </div>
+        
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <i class="fas fa-truck"></i>
+                <h3>Fast Shipping</h3>
+                <p>Most orders arrive within 2-3 business days</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-box"></i>
+                <h3>Secure Packaging</h3>
+                <p>Special packaging to prevent damage</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Order Tracking</h3>
+                <p>Track your order from our kitchen to your door</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-undo"></i>
+                <h3>Easy Returns</h3>
+                <p>Not satisfied? We offer no-hassle returns</p>
+            </div>
+        </div>
     </div>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Delicious Cookies</h3>
-                <p>Baking happiness since 1995</p>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: info@deliciouscookies.com</p>
-                <p>Phone: (555) 123-4567</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
-        </div>
-    </footer>
-</body>
-</html> 
+{% endblock %} 

@@ -192,7 +192,7 @@ def login():
              session['first_name'] = user[0]
              session['last_name'] = user[1]
              print(f"Session data; {session}")
-             return redirect(url_for('welcome'))  # Redirect to a welcome page
+             return redirect(url_for('profile'))  # Redirect to profile page
         else:
             flash('Invalid email or password', 'danger')
             return render_template('login.html')
@@ -412,6 +412,13 @@ def seed_test_user():
                 first_name, last_name, email, password_hash, phone_number, gets_newsletters
             ) VALUES (?,?,?,?,?,?); ''', ['John', 'Doe', 'test@example.com', hash_password('hashedpassword'), '000-000-0000', 1])
         conn.commit()
+
+@app.route('/logout')
+def logout():
+    # Clear all session data
+    session.clear()
+    flash("You have been successfully logged out.", "success")
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     create_db()

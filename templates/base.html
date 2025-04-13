@@ -53,10 +53,17 @@
                 <li><a href="{{ url_for('shipping') }}">Shipping & Delivery</a></li>
                 <li><a href="{{ url_for('wholesale') }}">Wholesale & Bulk Orders</a></li>
                 <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                {% if 'first_name' not in session %}
                 <li><a href="{{ url_for('login') }}">Login</a></li>
                 <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                {% endif %}
             </div>
             <li class="cart"><a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+            {% if 'first_name' in session %}
+            <li class="profile"><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+            {% else %}
+            <li class="profile"><a href="{{ url_for('login') }}"><i class="fas fa-user"></i> Profile</a></li>
+            {% endif %}
         </ul>
     </nav>
 

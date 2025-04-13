@@ -1,59 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You - Delicious Cookies</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
-</head>
-<body>
-    <nav>
-        <ul>
-            <div class="logo">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Delicious Cookies Logo">
-            </div>
-            <div class="left-items">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('products') }}">Our Cookies</a></li>
-                <li><a href="{{ url_for('shipping') }}">Shipping & Delivery</a></li>
-                <li><a href="{{ url_for('wholesale') }}">Wholesale & Bulk Orders</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-            </div>
-            <li class="cart"><a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
-        </ul>
-    </nav>
+{% extends "base.html" %}
 
-    <div class="thank-you-for-your-purchase">
+{% block content %}
+    <div class="thank-you-container">
         <div class="thank-you-content">
-            <i class="fas fa-check-circle" style="color: green; font-size: 100px;"></i>
-            <h1>Thank You for Your Purchase!</h1>
-            <p>A confirmation email has been sent to <strong>{{ email }}</strong>.</p>
-            <p>We hope you enjoy your cookies! For further details, check your email inbox.</p>
-            <a href="{{ url_for('products') }}" class="continue-shopping-btn">
-                Continue Shopping <i class="fas fa-cookie-bite"></i>
-            </a>
+            <i class="fas fa-check-circle"></i>
+            <h1>Thank You for Your Order!</h1>
+            <p>Your order has been successfully placed and is being processed.</p>
+            {% if email %}
+            <p class="confirmation-email">A confirmation email has been sent to {{ email }}</p>
+            {% endif %}
+            <div class="next-steps">
+                <h2>What's Next?</h2>
+                <ul>
+                    <li><i class="fas fa-box"></i> Your order will be prepared and shipped within 24 hours</li>
+                    <li><i class="fas fa-truck"></i> Standard shipping takes 2-3 business days</li>
+                    <li><i class="fas fa-envelope"></i> You'll receive tracking information via email</li>
+                </ul>
+            </div>
+            <div class="action-buttons">
+                <a href="{{ url_for('products') }}" class="primary-btn">Continue Shopping</a>
+                <a href="{{ url_for('home') }}" class="secondary-btn">Return Home</a>
+            </div>
         </div>
     </div>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Delicious Cookies</h3>
-                <p>Baking happiness since 1995</p>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: info@deliciouscookies.com</p>
-                <p>Phone: (555) 123-4567</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
-        </div>
-    </footer>
-</body>
-</html>
+{% endblock %}

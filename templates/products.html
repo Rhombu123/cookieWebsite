@@ -1,32 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Products - Delicious Cookies</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
-</head>
-<body>
-    <nav>
-        <ul>
-            <div class="logo">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Delicious Cookies Logo">
-            </div>
-            <div class="left-items">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('products') }}">Our Cookies</a></li>
-                <li><a href="{{ url_for('shipping') }}">Shipping & Delivery</a></li>
-                <li><a href="{{ url_for('wholesale') }}">Wholesale & Bulk Orders</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-            </div>
-            <li class="cart"><a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
-        </ul>
-    </nav>
+{% extends "base.html" %}
 
+{% block content %}
     <div class="products-hero">
         <h1>Our Cookie Collection</h1>
         <p>Handcrafted with love, baked fresh daily</p>
@@ -275,19 +249,5 @@
         </div>
     </div>
 
-    {% extends "base.html" %}
-
-{% block content %}
-<h1>Our Cookies</h1>
-<form action="{{ url_for('add_to_cart') }}" method="POST">
-    <input type="hidden" name="cookie_name" value="Chocolate Chip">
-    <input type="hidden" name="cookie_price" value="5.99">
-    <label for="quantity">Quantity:</label>
-    <input type="number" name="quantity" value="1" min="1">
-    <button type="submit">Add to Cart</button>
-</form>
-{% endblock %}
-
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
-</html> 
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %} 

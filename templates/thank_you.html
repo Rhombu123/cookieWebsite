@@ -1,32 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You - Delicious Cookies</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
-</head>
-<body>
-    <nav>
-        <ul>
-            <div class="logo">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Delicious Cookies Logo">
-            </div>
-            <div class="left-items">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('products') }}">Our Cookies</a></li>
-                <li><a href="{{ url_for('shipping') }}">Shipping & Delivery</a></li>
-                <li><a href="{{ url_for('wholesale') }}">Wholesale & Bulk Orders</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-            </div>
-            <li class="cart"><a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
-        </ul>
-    </nav>
+{% extends "base.html" %}
 
+{% block content %}
     <div class="thank-you-container">
         <div class="thank-you-content">
             <i class="fas fa-check-circle"></i>
@@ -50,22 +24,4 @@
             </div>
         </div>
     </div>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Delicious Cookies</h3>
-                <p>Baking happiness since 1995</p>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: info@deliciouscookies.com</p>
-                <p>Phone: (555) 123-4567</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
-        </div>
-    </footer>
-</body>
-</html> 
+{% endblock %} 

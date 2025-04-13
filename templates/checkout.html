@@ -1,38 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - Delicious Cookies</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
-</head>
-<body>
-    <nav>
-        <ul>
-            <div class="logo">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Delicious Cookies Logo">
-            </div>
-            <div class="left-items">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('products') }}">Our Cookies</a></li>
-                <li><a href="{{ url_for('shipping') }}">Shipping & Delivery</a></li>
-                <li><a href="{{ url_for('wholesale') }}">Wholesale & Bulk Orders</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-            </div>
-            <li class="cart"><a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
-        </ul>
-    </nav>
+{% extends "base.html" %}
 
+{% block content %}
     <div class="checkout-container">
-        <h1>Checkout</h1>
-        <form action="{{ url_for('process_payment') }}" method="POST" class="checkout-form">
+        <form class="checkout-form" action="{{ url_for('process_payment') }}" method="POST">
+            <h2>Checkout</h2>
             <div class="form-group">
-                <label for="full-name">Full Name</label>
-                <input type="text" id="full-name" name="full_name" required>
+                <label for="full_name">Full Name</label>
+                <input type="text" id="full_name" name="full_name" required>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
@@ -40,36 +14,29 @@
             </div>
             <div class="form-group">
                 <label for="address">Shipping Address</label>
-                <textarea id="address" name="address" rows="4" required></textarea>
+                <textarea id="address" name="address" required></textarea>
             </div>
             <div class="form-group">
-                <label for="payment-method">Payment Method</label>
-                <select id="payment-method" name="payment_method" required>
+                <label for="payment_method">Payment Method</label>
+                <select id="payment_method" name="payment_method" required>
+                    <option value="">Select Payment Method</option>
                     <option value="credit_card">Credit Card</option>
                     <option value="paypal">PayPal</option>
-                    <option value="bank_transfer">Bank Transfer</option>
+                    <option value="apple_pay">Apple Pay</option>
                 </select>
             </div>
-
-            <button type="submit" class="checkout-submit-btn">Complete Purchase</button>
+            <button type="submit" class="checkout-button">Place Order</button>
         </form>
+        
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-items">
+                <!-- Display cart items here -->
+                <p>Your cart items will be displayed here.</p>
+            </div>
+            <div class="summary-total">
+                <p>Total: $XX.XX</p>
+            </div>
+        </div>
     </div>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Delicious Cookies</h3>
-                <p>Baking happiness since 1995</p>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: info@deliciouscookies.com</p>
-                <p>Phone: (555) 123-4567</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
-        </div>
-    </footer>
-</body>
-</html>
+{% endblock %}

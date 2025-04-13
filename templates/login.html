@@ -1,65 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Delicious Cookies</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        /* Popup container */
-        .popup-container {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 1000;
-        }
-
-        .popup-container.active {
-            display: block; /* Show the popup */
-        }
-
-        .popup-container button {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        .popup-container button:hover {
-            background-color: #d32f2f;
-        }
-    </style>
-</head>
-<body>
-    <nav>
-        <ul>
-            <div class="logo">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Delicious Cookies Logo">
-            </div>
-            <div class="left-items">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('products') }}">Our Cookies</a></li>
-                <li><a href="{{ url_for('shipping') }}">Shipping & Delivery</a></li>
-                <li><a href="{{ url_for('wholesale') }}">Wholesale & Bulk Orders</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-            </div>
-            <li class="cart"><a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
-        </ul>
-    </nav>
-
+{% block content %}
     <div class="login-container">
         <form class="login-form" action="{{ url_for('login') }}" method="POST">
             <h2>Login</h2>
@@ -84,44 +25,4 @@
         </form>
         <span style="color:red" id="message">{{ msg }}</span>
     </div>
-
-    <!-- Flash message popup -->
-    <div class="popup-container" id="popup-container">
-        <p id="popup-message"></p>
-        <button onclick="closePopup()">Close</button>
-    </div>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Delicious Cookies</h3>
-                <p>Baking happiness since 1995</p>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: info@deliciouscookies.com</p>
-                <p>Phone: (555) 123-4567</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Delicious Cookies. All Rights Reserved.</p>
-        </div>
-    </footer>
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <script type="text/javascript">
-                // Display the popup with the flash message
-                document.getElementById('popup-message').innerText = "{{ messages[0] }}";
-                document.getElementById('popup-container').classList.add('active');
-            </script>
-        {% endif %}
-    {% endwith %}
-
-    <script>
-        function closePopup() {
-            document.getElementById('popup-container').classList.remove('active');
-        }
-    </script>
-</body>
-</html>
+{% endblock %}

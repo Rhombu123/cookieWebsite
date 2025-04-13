@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>Your Profile</h1>
+        <p>Manage your account information and view your order history</p>
+    </div>
+
+    <div class="profile-content">
+        <div class="profile-sidebar">
+            <div class="profile-nav">
+                <ul>
+                    <li class="active"><a href="#account-info" data-section="account-info">Account Information</a></li>
+                    <li><a href="#order-history" data-section="order-history">Order History</a></li>
+                    <li><a href="#account-settings" data-section="account-settings">Account Settings</a></li>
+                </ul>
+                <div class="logout-button-container">
+                    <a href="{{ url_for('logout') }}" class="logout-button" onclick="logoutAndRedirect(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-main">
+            <!-- Account Information Section -->
+            <div class="profile-section active" id="account-info">
+                <h2>Account Information</h2>
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="profile-details">
+                        <h3>{{ user_details[0] }} {{ user_details[1] }}</h3>
+                        <p><i class="fas fa-envelope"></i> {{ user_details[2] }}</p>
+                        <p><i class="fas fa-phone"></i> {{ user_details[3] or 'Not provided' }}</p>
+                        <p><i class="fas fa-bell"></i> Newsletter: {{ 'Subscribed' if user_details[4] else 'Not subscribed' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order History Section -->
+            <div class="profile-section" id="order-history">
+                <h2>Order History</h2>
+                {% if orders %}
+                <div class="orders-list">
+                    {% for order in orders %}
+                    <div class="order-item">
+                        <div class="order-header">
+                            <div class="order-id">
+                                <h3>Order #{{ order[0] }}</h3>
+                                <span class="order-date">{{ order[1] }}</span>
+                            </div>
+                            <div class="order-status status-{{ order[3]|lower }}">
+                                {{ order[3] }}
+                            </div>
+                        </div>
+                        <div class="order-details">
+                            <div class="order-total">
+                                <p>Total: ${{ "%.2f"|format(order[2]) }}</p>
+                            </div>
+                            <a href="#" class="view-order-btn">View Details</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-orders">
+                    <i class="fas fa-cookie-bite"></i>
+                    <h3>No orders yet!</h3>
+                    <p>Your order history will appear here once you make your first purchase.</p>
+                    <a href="{{ url_for('products') }}" class="browse-cookies-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Account Settings Section -->
+            <div class="profile-section" id="account-settings">
+                <h2>Account Settings</h2>
+                <form action="{{ url_for('update_profile') }}" method="post" class="profile-form">
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" value="{{ user_details[0] }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" value="{{ user_details[1] }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="{{ user_details[2] }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" value="{{ user_details[3] or '' }}">
+                    </div>
+                    <div class="newsletter-signup">
+                        <label>
+                            <input type="checkbox" name="newsletter" {% if user_details[4] %}checked{% endif %}>
+                            Subscribe to our newsletter to receive updates and special offers
+                        </label>
+                    </div>
+                    <button type="submit" class="update-profile-btn">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript for profile tab navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabLinks = document.querySelectorAll('.profile-nav a');
+        const sections = document.querySelectorAll('.profile-section');
+
+        tabLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Remove active class from all tabs and sections
+                tabLinks.forEach(l => l.parentElement.classList.remove('active'));
+                sections.forEach(s => s.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding section
+                this.parentElement.classList.add('active');
+                const targetSection = this.getAttribute('data-section');
+                document.getElementById(targetSection).classList.add('active');
+            });
+        });
+    });
+
+    // Function to ensure logout and redirection to home page
+    function logoutAndRedirect() {
+        // Clear any local storage or client-side data if needed
+        // First visit the logout URL to clear the server-side session
+        fetch("{{ url_for('logout') }}", { method: 'GET' })
+            .finally(() => {
+                // Then redirect to the home page
+                window.location.href = "{{ url_for('home') }}";
+            });
+    }
+</script>
+{% endblock %} 
