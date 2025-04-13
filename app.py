@@ -11,9 +11,12 @@ def hash_password(password):
     encoded_hash = base64.b64encode(sha256(encoded_string).digest())
     return encoded_hash.decode()
 
+
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_COOKIE_SECURE'] = False
+app.config['DB_REF'] = 'db.sqlite'
 
 @app.route('/')
 def home():
@@ -88,8 +91,8 @@ def add_to_cart():
     return redirect(url_for('products'))
 
 
-@app.route('/profile')
-def profile():
+@app.route('/profile_old')
+def profile_old():
     if 'first_name' not in session or 'last_name' not in session:
         flash("You need to log in to view your profile.", "danger")
         return redirect(url_for('login'))
@@ -97,7 +100,7 @@ def profile():
     user_first_name = session['first_name']
     user_last_name = session['last_name']
 
-    with sqlite3.connect('db.sqlite') as conn:
+    with sqlite3.connect(app.config['DB_REF']) as conn:
         cursor = conn.cursor()
         cursor.execute('''
             SELECT first_name, last_name, email, phone_number, gets_newsletters
@@ -122,7 +125,7 @@ def update_profile():
     newsletter = 1 if request.form.get('newsletter') else 0
 
     # Update the user information in the database
-    with sqlite3.connect('db.sqlite') as conn:
+    with sqlite3.connect(app.config['DB_REF']) as conn:
         cursor = conn.cursor()
         cursor.execute('''
             UPDATE users
@@ -148,7 +151,7 @@ def profile():
     user_first_name = session['first_name']
     user_last_name = session['last_name']
 
-    with sqlite3.connect('db.sqlite') as conn:
+    with sqlite3.connect(app.config['DB_REF']) as conn:
         cursor = conn.cursor()
         cursor.execute('''
             SELECT first_name, last_name, email, phone_number, gets_newsletters
@@ -178,7 +181,7 @@ def login():
         email= request.form['email']
         password = request.form['password']
         password_hash = hash_password(password)
-        with sqlite3.connect('db.sqlite') as con:
+        with sqlite3.connect(app.config['DB_REF']) as con:
             cursor = con.cursor()
             cursor.execute('SELECT first_name, last_name FROM users WHERE email = ? AND password_hash = ?',
                            (email, password_hash))
@@ -195,6 +198,7 @@ def login():
             return render_template('login.html')
 
     return render_template('login.html')
+
 @app.route('/welcome')
 def welcome():
     if 'first_name' in session and 'last_name' in session:
@@ -248,7 +252,7 @@ def create_user():
         if password != confirm_password:
             return render_template('signup.html', msg='Passwords do not match')
 
-        with sqlite3.connect('db.sqlite') as conn:
+        with sqlite3.connect(app.config['DB_REF']) as conn:
             password_hash = hash_password(password)
 
             cursor = conn.cursor()
@@ -274,7 +278,7 @@ def signup():
     return render_template('signup.html', msg='')
 
 def create_db():
-    conn = sqlite3.connect('db.sqlite')
+    conn = sqlite3.connect(app.config['DB_REF'])
     cursor = conn.cursor()
     cursor.execute('''
                     CREATE TABLE IF NOT EXISTS users (
@@ -326,10 +330,25 @@ def create_db():
     conn.commit()
     conn.close()
 
+# DANGER: this function will delete everything from the database. Use at your own risk.
+def drop_db():
+    with sqlite3.connect((app.config['DB_REF'])) as conn:
+        cursor = conn.cursor()
+
+        cursor.execute('''DROP TABLE users''')
+        conn.commit()
+        cursor.execute('''DROP TABLE cookies''')
+        conn.commit()
+        cursor.execute('''DROP TABLE cart_items''')
+        conn.commit()
+        cursor.execute('''DROP TABLE orders''')
+        conn.commit()
+
+
 # DANGER: USE SPARINGLY! Make sure to clean up any lingering foreign keys before using this
 def reset_cookies():
     try:
-        with sqlite3.connect("db.sqlite") as conn:
+        with sqlite3.connect(app.config['DB_REF']) as conn:
             cursor = conn.cursor()
 
             cursor.execute('''DELETE FROM cookies''')
@@ -354,7 +373,7 @@ def read_csv():
 
 def seed_cookies():
     try:
-        with sqlite3.connect("db.sqlite") as conn:
+        with sqlite3.connect(app.config['DB_REF']) as conn:
             cursor = conn.cursor()
 
             cursor.execute('''SELECT COUNT(*) FROM cookies''')
@@ -383,6 +402,16 @@ def seed_cookies():
         print("Error seeding cookies: " + str(e))
     finally:
         conn.close()
+
+
+def seed_test_user():
+    with sqlite3.connect(app.config['DB_REF']) as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO users (
+                first_name, last_name, email, password_hash, phone_number, gets_newsletters
+            ) VALUES (?,?,?,?,?,?); ''', ['John', 'Doe', 'test@example.com', hash_password('hashedpassword'), '000-000-0000', 1])
+        conn.commit()
 
 if __name__ == '__main__':
     create_db()
