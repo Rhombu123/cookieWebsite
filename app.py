@@ -1,13 +1,24 @@
+"""
+app.py
+
+Main Flask web application for a cookie store.
+Handles routing, user authentication,
+cart management, checkout, and database operations.
+"""
+
 import os
-from flask import Flask, render_template, request, redirect, url_for, session
-from flask import flash
 import sqlite3
+from sqlite3 import DatabaseError
 import base64
 from hashlib import sha256
 import csv
 
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask import flash
+
 
 def hash_password(password):
+    """Hashes a password using SHA-256 and encodes it in base64."""
     encoded_string = password.encode('utf-8')
     encoded_hash = base64.b64encode(sha256(encoded_string).digest())
     return encoded_hash.decode()
@@ -22,33 +33,37 @@ app.config['DB_REF'] = 'db.sqlite'
 
 @app.route('/')
 def home():
-
+    """Render the homepage."""
     return render_template('index.html')
 
 
 @app.route('/products')
 def products():
+    """Render the products page."""
     return render_template('products.html')
 
 
 @app.route('/shipping')
 def shipping():
-
+    """Render the shipping information page."""
     return render_template('shipping.html')
 
 
 @app.route('/wholesale')
 def wholesale():
+    """Render the wholesale information page."""
     return render_template('wholesale.html')
 
 
 @app.route('/contact')
 def contact():
+    """Render the contact page."""
     return render_template('contact.html')
 
 
 @app.route('/clear_cart')
 def clear_cart():
+    """Clear the user's shopping cart from the session."""
     session.pop('cart', None)  # Remove the cart key from the session
     flash("Cart has been cleared.", "info")
     return redirect(url_for('cart'))
@@ -56,7 +71,7 @@ def clear_cart():
 
 @app.before_request
 def clear_cart_on_first_visit():
-    # If first visit, clear cart and mark the app as run.
+    """Clears the cart when the session starts for the first time."""
     if 'app_first_run' not in session:
         session.pop('cart', None)
         session['app_first_run'] = True
@@ -65,6 +80,7 @@ def clear_cart_on_first_visit():
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
+    """Adds a cookie to the user's shopping cart stored in the session."""
     if 'first_name' not in session:
         flash("You need to log in before adding items to the cart.", "danger")
         return redirect(url_for('login'))
@@ -78,11 +94,11 @@ def add_to_cart():
     if 'cart' not in session:
         session['cart'] = []
 
-    cart = session['cart']
+    newcart = session['cart']
 
     # Check if the item already exists in the cart, update quantity if true
     item_found = False
-    for item in cart:
+    for item in newcart:
         if item['name'] == cookie_name:
             item['quantity'] += quantity
             item_found = True
@@ -90,20 +106,21 @@ def add_to_cart():
 
     if not item_found:
         # Add new item to the cart
-        cart.append({
+        newcart.append({
             'name': cookie_name,
             'price': cookie_price,
             'quantity': quantity
         })
 
     # Save the updated cart back to session
-    session['cart'] = cart
+    session['cart'] = newcart
     flash(f"{cookie_name} added to your cart!", "success")
     return redirect(url_for('products'))
 
 
 @app.route('/profile_old')
 def profile_old():
+    """Displays an old version of the user's profile page."""
     if 'first_name' not in session or 'last_name' not in session:
         flash("You need to log in to view your profile.", "danger")
         return redirect(url_for('login'))
@@ -125,6 +142,7 @@ def profile_old():
 
 @app.route('/update_profile', methods=['POST'])
 def update_profile():
+    """Updates the user's profile information in the database."""
     if 'first_name' not in session or 'last_name' not in session:
         flash("You need to log in to update your profile.", "danger")
         return redirect(url_for('login'))
@@ -159,6 +177,7 @@ def update_profile():
 
 @app.route('/profile')
 def profile():
+    """Displays the logged-in user's profile and order history."""
     if 'first_name' not in session or 'last_name' not in session:
         flash("You need to log in to view your profile.", "danger")
         return redirect(url_for('login'))
@@ -191,6 +210,7 @@ def profile():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """Authenticates a user and sets session data."""
     if request.method == 'POST':
         print(request.form)
         email = request.form['email']
@@ -209,15 +229,16 @@ def login():
             session['last_name'] = user[1]
             print(f"Session data; {session}")
             return redirect(url_for('profile'))  # Redirect to profile page
-        else:
-            flash('Invalid email or password', 'danger')
-            return render_template('login.html')
+
+        flash('Invalid email or password', 'danger')
+        return render_template('login.html')
 
     return render_template('login.html')
 
 
 @app.route('/welcome')
 def welcome():
+    """Displays a welcome message if the user is logged in."""
     if 'first_name' in session and 'last_name' in session:
         # Retrieve data from session
         first_name = session['first_name']
@@ -231,6 +252,7 @@ def welcome():
 
 @app.route('/cart')
 def cart():
+    """Displays the user's cart and calculates total cost."""
     if 'cart' not in session or not session['cart']:
         # Empty cart
         return render_template('cart.html', cart_items=[], total=0)
@@ -244,11 +266,13 @@ def cart():
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
+    """Displays the checkout form."""
     return render_template('checkout.html')
 
 
 @app.route('/process_payment', methods=['POST'])
 def process_payment():
+    """Processes a mock payment and displays a confirmation."""
     # Process the form data here
     full_name = request.form.get('full_name')
     email = request.form.get('email')
@@ -266,6 +290,7 @@ def process_payment():
 
 @app.route('/create_user', methods=['POST', 'GET'])
 def create_user():
+    """Creates a new user account and stores it in the database."""
     try:
         first_name = request.form['first-name']
         last_name = request.form['last-name']
@@ -300,22 +325,23 @@ def create_user():
             conn.commit()
             target = 'thank_you.html'
             msg = ''
-    except Exception as e:
-        conn.rollback()
+    except (KeyError, DatabaseError, ValueError) as e:
+        if 'conn' in locals():
+            conn.rollback()
+            conn.close()
         target = 'signup.html'
-        # msg = 'An internal error occurred while processing your request'
         msg = 'Error: ' + str(e)
-    finally:
-        conn.close()
-        return render_template(target, msg=msg)
+    return render_template(target, msg=msg)
 
 
 @app.route('/signup')
 def signup():
+    """Displays the signup page."""
     return render_template('signup.html', msg='')
 
 
 def create_db():
+    """Creates the SQLite database tables if they do not exist."""
     conn = sqlite3.connect(app.config['DB_REF'])
     cursor = conn.cursor()
     cursor.execute('''
@@ -373,6 +399,7 @@ def create_db():
 
 
 def drop_db():
+    """Drops all tables in the database (DANGEROUS)."""
     with sqlite3.connect((app.config['DB_REF'])) as conn:
         cursor = conn.cursor()
 
@@ -391,13 +418,14 @@ def drop_db():
 
 
 def reset_cookies():
+    """Deletes all entries from the cookies table."""
     try:
         with sqlite3.connect(app.config['DB_REF']) as conn:
             cursor = conn.cursor()
 
             cursor.execute('''DELETE FROM cookies''')
             conn.commit()
-    except Exception as e:
+    except (sqlite3.DatabaseError, sqlite3.OperationalError)as e:
         conn.rollback()
         print("Failed to purge cookies table: " + str(e))
     finally:
@@ -405,19 +433,21 @@ def reset_cookies():
 
 
 def read_csv():
+    """Reads and returns contents of cookies_table.csv."""
     try:
-        with open("cookies_table.csv", 'r') as file_reader:
+        with open("cookies_table.csv", 'r', encoding='utf-8') as file_reader:
             reader = csv.reader(file_reader)
             output = list(reader)
-    except Exception as e:
+    except (FileNotFoundError, IOError, csv.Error) as e:
         print("Error processing cookies_table.csv: " + str(e))
         output = []
     finally:
         file_reader.close()
-        return output
+    return output
 
 
 def seed_cookies():
+    """Seeds the cookies table from cookies_table.csv if empty."""
     try:
         with sqlite3.connect(app.config['DB_REF']) as conn:
             cursor = conn.cursor()
@@ -447,7 +477,7 @@ def seed_cookies():
                     print("No cookies to seed")
             else:
                 print("Cookies already seeded")
-    except Exception as e:
+    except (sqlite3.Error, ValueError, csv.Error) as e:
         conn.rollback()
         print("Error seeding cookies: " + str(e))
     finally:
@@ -455,6 +485,7 @@ def seed_cookies():
 
 
 def seed_test_user():
+    """Adds a test user to the users table."""
     with sqlite3.connect(app.config['DB_REF']) as conn:
         cursor = conn.cursor()
         cursor.execute('''
@@ -476,6 +507,7 @@ def seed_test_user():
 
 @app.route('/logout')
 def logout():
+    """Logs the user out by clearing session data."""
     # Clear all session data
     session.clear()
     flash("You have been successfully logged out.", "success")
