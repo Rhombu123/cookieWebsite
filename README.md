@@ -2,6 +2,11 @@
 
 A delightful e-commerce website dedicated to selling artisanal, freshly-baked cookies. Our platform offers a seamless shopping experience for cookie enthusiasts to browse, order, and enjoy premium quality cookies delivered right to their doorstep.
 
+## 🔧 New Feature: User Profile with Order History
+
+- View your name, email, phone number, and newsletter preferences
+- See past orders including order date, quantity, status, and total cost
+- 
 ### Setup instructions (how to run it locally)
 1. Clone the repository
        Open your terminal or command prompt and run the following command to clone the repository to your local machine:

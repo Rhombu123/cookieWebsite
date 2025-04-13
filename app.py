@@ -88,6 +88,89 @@ def add_to_cart():
     return redirect(url_for('products'))
 
 
+@app.route('/profile')
+def profile():
+    if 'first_name' not in session or 'last_name' not in session:
+        flash("You need to log in to view your profile.", "danger")
+        return redirect(url_for('login'))
+
+    user_first_name = session['first_name']
+    user_last_name = session['last_name']
+
+    with sqlite3.connect('db.sqlite') as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT first_name, last_name, email, phone_number, gets_newsletters
+            FROM users
+            WHERE first_name = ? AND last_name = ?;
+        ''', (user_first_name, user_last_name))
+        user_details = cursor.fetchone()
+
+    return render_template('profile.html', user_details=user_details)
+
+@app.route('/update_profile', methods=['POST'])
+def update_profile():
+    if 'first_name' not in session or 'last_name' not in session:
+        flash("You need to log in to update your profile.", "danger")
+        return redirect(url_for('login'))
+
+    # Get updated profile details from the form
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    email = request.form['email']
+    phone = request.form['phone']
+    newsletter = 1 if request.form.get('newsletter') else 0
+
+    # Update the user information in the database
+    with sqlite3.connect('db.sqlite') as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE users
+            SET first_name = ?, last_name = ?, email = ?, phone_number = ?, gets_newsletters = ?
+            WHERE first_name = ? AND last_name = ?;
+        ''', (first_name, last_name, email, phone, newsletter, session['first_name'], session['last_name']))
+        conn.commit()
+
+    # Update the session data with the new name
+    session['first_name'] = first_name
+    session['last_name'] = last_name
+
+    flash("Profile updated successfully!", "success")
+    return redirect(url_for('profile'))
+
+
+@app.route('/profile')
+def profile():
+    if 'first_name' not in session or 'last_name' not in session:
+        flash("You need to log in to view your profile.", "danger")
+        return redirect(url_for('login'))
+
+    user_first_name = session['first_name']
+    user_last_name = session['last_name']
+
+    with sqlite3.connect('db.sqlite') as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT first_name, last_name, email, phone_number, gets_newsletters
+            FROM users
+            WHERE first_name = ? AND last_name = ?;
+        ''', (user_first_name, user_last_name))
+        user_details = cursor.fetchone()
+
+        # Fetch order history
+        cursor.execute('''
+            SELECT o.id, o.order_date, o.total_price, o.status
+            FROM orders o
+            JOIN users u ON u.id = o.user_id
+            WHERE u.first_name = ? AND u.last_name = ?
+            ORDER BY o.order_date DESC;
+        ''', (user_first_name, user_last_name))
+        orders = cursor.fetchall()
+
+    return render_template('profile.html', user_details=user_details, orders=orders)
+
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
