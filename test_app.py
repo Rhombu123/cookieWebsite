@@ -1,3 +1,6 @@
+from idlelib.rpc import response_queue
+
+
 def test_signup(client):
     response = client.post('/create_user', data={'first-name': 'John', 'last-name': 'Doe', 'email': 'test@example.com', 'password': 'hashedpassword', 'confirm-password': 'hashedpassword', 'phone': '000-000-0000', 'newsletter': 'False'})
 
@@ -13,6 +16,19 @@ def test_login(client):
     response = client.get('/welcome')
 
     assert response.status_code == 200
+
+def test_logout(client):
+    response = client.post('/login', data={'email': 'test@example.com', 'password': 'hashedpassword'})
+
+    assert response.status_code == 302
+
+    response = client.get('/logout')
+
+    assert response.status_code == 302
+
+    response = client.get('/welcome')
+
+    assert response.status_code == 302
 
 def test_failed_login(client):
     # test bad email

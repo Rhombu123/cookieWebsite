@@ -129,5 +129,24 @@ flowchart LR
 | `/payment`                    | POST    | Payment details (e.g., credit card information)    | Redirects to `order_confirmation.html` or shows payment error |
 | `/order/confirmation`         | GET     | None                                               | Renders `order_confirmation.html` (Order Summary) |
 
+### Update 1
+#### New Feature
+Jinja Template by Abdal, API code by Angel
 
+- Users can now view their profile by going to /profile. There, they can view information about their account and orders.
+- Users can now make changes to their account.
 
+#### New Routes
+
+| Route | Method | Input | Output |
+| ----- | ------ | ----- |--------|
+| `/profile` | GET | None | With `first_name` and `last_name` from session, renders `profile.html` (account info). Without session info, redirects to `/login`. |
+| `/update_profile` | POST | `first_name`: User's first name, `last_name`: User's last name, `email`: User's email, `phone`: User's phone number, `newsletter`: whether the user wants to receive newsletters | Redirects to `/login` if user is not logged in, or to `/profile` after updating their info. |
+
+#### Test Coverage
+Developed by Anthony
+
+This app uses pytest for testing. Test configuration uses a separate sqlite file called `test_db.sqlite` which it seeds while building the test environment.
+Tests cover signup/login functionality, profile accessing and updating, cart manipulation, and simply fetching the homepage. Login tests also test bad email/password inputs.
+Most of the test cases focus on the status code of the response. 302 from `/login`, `/add_to_cart`, and `/clear_cart` indicate success. Some cases, like `/create_user`, return a new template depending on the outcome, so the test must instead check for key phrases in the response data.
+The `/update_profile` test is unique among the other cases. In order to determine success, the test must follow the redirect and check the path.
