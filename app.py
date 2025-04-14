@@ -267,7 +267,9 @@ def cart():
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     """Displays the checkout form."""
-    return render_template('checkout.html')
+    cart_items = session.get('cart', [])
+    total = sum(item["price"] * item['quantity'] for item in cart_items)
+    return render_template('checkout.html', cart_items=cart_items, total=total)
 
 
 @app.route('/process_payment', methods=['POST'])
