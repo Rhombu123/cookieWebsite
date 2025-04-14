@@ -88,7 +88,7 @@ Here are some screenshots of the working project:
 ![cookie-view](images/vewcookie.jpg)
 *Detailed view of a single cookie with options to add to the cart.*
 
-![profile-view](images/profile-view/png)
+![profile-view](images/profile-view.png)
 
 ![profile-edit-view](images/profile-edit-view.png)
 
