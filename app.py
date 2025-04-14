@@ -13,6 +13,7 @@ import base64
 from hashlib import sha256
 import csv
 
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask import flash
 
@@ -274,20 +275,98 @@ def checkout():
 
 @app.route('/process_payment', methods=['POST'])
 def process_payment():
-    """Processes a mock payment and displays a confirmation."""
-    # Process the form data here
-    full_name = request.form.get('full_name')
-    email = request.form.get('email')
-    address = request.form.get('address')
-    payment_method = request.form.get('payment_method')
+    """Processes the user's payment, creates an order,
+     and clears the cart upon successful transaction."""
+    # Ensure the user is logged in
+    if 'first_name' not in session or 'last_name' not in session:
+        flash("Please log in to complete your order.", "danger")
+        return redirect(url_for('login'))
 
-    # Add logic for saving data or processing payment here
-    return render_template(
-        'thank_you_for_order.html',
-        full_name=full_name,
-        email=email,
-        address=address,
-        payment_method=payment_method)
+    # Get the form data
+    form_data = {
+        'full_name': request.form.get('full_name'),
+        'email': request.form.get('email'),
+        'address': request.form.get('address'),
+        'payment_method': request.form.get('payment_method')
+    }
+
+    # Retrieve cart items
+    cart_items = session.get('cart', [])
+    if not cart_items:
+        flash("Your cart is empty.", "danger")
+        return redirect(url_for('cart'))
+
+    # Calculate total price
+    total = sum(item['price'] * item['quantity'] for item in cart_items)
+    order_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    status = 'Pending'
+
+    try:
+        with sqlite3.connect(app.config['DB_REF']) as conn:
+            cursor = conn.cursor()
+
+            # Get user ID
+            user_id = get_user_id(session['first_name'],
+                                  session['last_name'], cursor)
+            if not user_id:
+                flash("User not found.", "danger")
+                return redirect(url_for('login'))
+
+            # Create order and add items to order_items table
+            order_id = create_order(user_id, total, order_date, status, cursor)
+            add_items_to_order(cart_items, order_id, cursor)
+
+            conn.commit()
+
+        session['cart'] = []  # Clear cart
+
+        return render_template(
+            'thank_you_for_order.html',
+            full_name=form_data['full_name'],
+            email=form_data['email'],
+            address=form_data['address'],
+            payment_method=form_data['payment_method']
+        )
+
+    except sqlite3.Error as e:
+        print("Error processing order:", e)
+        flash("There was a problem placing your order.", "danger")
+        return redirect(url_for('checkout'))
+
+
+def get_user_id(first_name, last_name, cursor):
+    """Fetches the user ID based on
+     the first and last name."""
+    cursor.execute('''SELECT id FROM users
+     WHERE first_name = ? AND last_name = ?''',
+                   (first_name, last_name))
+    user_row = cursor.fetchone()
+    return user_row[0] if user_row else None
+
+
+def create_order(user_id, total, order_date, status, cursor):
+    """Creates an order and
+    returns the order ID."""
+    cursor.execute('''INSERT INTO orders (user_id, total_price,
+     order_date, status)
+     VALUES (?, ?, ?, ?)''',
+                   (user_id, total, order_date, status))
+    return cursor.lastrowid
+
+
+def add_items_to_order(cart_items, order_id, cursor):
+    """Adds items from the cart to the order_items table."""
+    for item in cart_items:
+        cursor.execute('SELECT id FROM cookies WHERE name = ?',
+                       (item['name'],))
+        cookie_row = cursor.fetchone()
+        if cookie_row:
+            cookie_id = cookie_row[0]
+            cursor.execute('''INSERT INTO order_items (order_id,
+            cookie_id, quantity, price)
+             VALUES (?, ?, ?, ?)''',
+                           (order_id, cookie_id, item['quantity'],
+                            item['price']))
 
 
 @app.route('/create_user', methods=['POST', 'GET'])
@@ -394,6 +473,19 @@ def create_db():
                     );
                     ''')
     conn.commit()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS order_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_id INTEGER,
+            cookie_id INTEGER,
+            quantity INTEGER,
+            price REAL,
+            FOREIGN KEY (order_id) REFERENCES orders (id),
+            FOREIGN KEY (cookie_id) REFERENCES cookies (id)
+        );
+    ''')
+    conn.commit()
+
     conn.close()
 
 # DANGER: this function will delete everything from the database.
