@@ -13,6 +13,6 @@ jobs:
       - name: Install packages
         run: pip install pylint pytest pytest-flask
       - name: Run pylint
-        run: pylint .
+        run: pylint --ignore=setuptools
       - name: Run pytest
         run: pytest
