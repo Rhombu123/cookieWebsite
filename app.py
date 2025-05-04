@@ -1,12 +1,14 @@
+"""The backbone of the cookie website. Provides and handles core functionality."""
 import os
-
-from flask import Flask, render_template, request, redirect, url_for, session,flash
 import sqlite3
 import base64
 from hashlib import sha256
 import csv
 
+from flask import Flask, render_template, request, redirect, url_for, session,flash
+
 def hash_password(password):
+    """Generates a SHA256 hash for a given password"""
     encoded_string = password.encode('utf-8')
     encoded_hash = base64.b64encode(sha256(encoded_string).digest())
     return encoded_hash.decode()
@@ -20,32 +22,39 @@ app.config['DB_REF'] = 'db.sqlite'
 
 @app.route('/')
 def home():
+    """Renders the homepage"""
     return render_template('index.html')
 
 @app.route('/products')
 def products():
+    """Renders the products page"""
     return render_template('products.html')
 
 @app.route('/shipping')
 def shipping():
+    """Renders the shipping page"""
     return render_template('shipping.html')
 
 @app.route('/wholesale')
 def wholesale():
+    """Renders the wholesale page"""
     return render_template('wholesale.html')
 
 @app.route('/contact')
 def contact():
+    """Renders the contact page"""
     return render_template('contact.html')
 
 @app.route('/clear_cart')
 def clear_cart():
+    """Clears the user's cart"""
     session.pop('cart', None)  # Remove the cart key from the session
     flash("Cart has been cleared.", "info")
     return redirect(url_for('cart'))
 
 @app.before_request
 def clear_cart_on_first_visit():
+    """Clears the user's cart if the app has not processed their visit yet"""
     # Check if a specific key in the session indicates the user has visited before.
     if 'app_first_run' not in session:
         session.pop('cart', None)
@@ -54,6 +63,7 @@ def clear_cart_on_first_visit():
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
+    """Adds an item to the user's cart"""
     if 'first_name' not in session:
         flash("You need to log in before adding items to the cart.", "danger")
         return redirect(url_for('login'))
@@ -67,11 +77,11 @@ def add_to_cart():
     if 'cart' not in session:
         session['cart'] = []
 
-    cart = session['cart']
+    user_cart = session['cart']
 
     # Check if the item already exists in the cart, update quantity if true
     item_found = False
-    for item in cart:
+    for item in user_cart:
         if item['name'] == cookie_name:
             item['quantity'] += quantity
             item_found = True
@@ -79,22 +89,25 @@ def add_to_cart():
 
     if not item_found:
         # Add new item to the cart
-        cart.append({
+        user_cart.append({
             'name': cookie_name,
             'price': cookie_price,
             'quantity': quantity
         })
 
     # Save the updated cart back to session
-    session['cart'] = cart
+    session['cart'] = user_cart
     flash(f"{cookie_name} added to your cart!", "success")
     return redirect(url_for('products'))
 
 
 @app.route('/profile_old')
 def profile_old():
+    """Renders the old profile page, which lacks the user's order history"""
     if 'first_name' not in session or 'last_name' not in session:
-        flash("You need to log in to view your profile.", "danger")
+        flash(
+            "You need to log in to view your profile.",
+            "danger")
         return redirect(url_for('login'))
 
     user_first_name = session['first_name']
@@ -113,8 +126,11 @@ def profile_old():
 
 @app.route('/update_profile', methods=['POST'])
 def update_profile():
+    """Updates a user's profile"""
     if 'first_name' not in session or 'last_name' not in session:
-        flash("You need to log in to update your profile.", "danger")
+        flash(
+            "You need to log in to update your profile.",
+            "danger")
         return redirect(url_for('login'))
 
     # Get updated profile details from the form
@@ -131,7 +147,9 @@ def update_profile():
             UPDATE users
             SET first_name = ?, last_name = ?, email = ?, phone_number = ?, gets_newsletters = ?
             WHERE first_name = ? AND last_name = ?;
-        ''', (first_name, last_name, email, phone, newsletter, session['first_name'], session['last_name']))
+        ''',
+                       (first_name, last_name, email, phone,
+                        newsletter, session['first_name'], session['last_name']))
         conn.commit()
 
     # Update the session data with the new name
@@ -144,6 +162,7 @@ def update_profile():
 
 @app.route('/profile')
 def profile():
+    """Renders the new profile page, which includes the user's order history"""
     if 'first_name' not in session or 'last_name' not in session:
         flash("You need to log in to view your profile.", "danger")
         return redirect(url_for('login'))
@@ -172,10 +191,9 @@ def profile():
 
     return render_template('profile.html', user_details=user_details, orders=orders)
 
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """Authenticates a user"""
     if request.method == 'POST':
         print(request.form)
         email= request.form['email']
@@ -183,24 +201,26 @@ def login():
         password_hash = hash_password(password)
         with sqlite3.connect(app.config['DB_REF']) as con:
             cursor = con.cursor()
-            cursor.execute('SELECT first_name, last_name FROM users WHERE email = ? AND password_hash = ?',
+            cursor.execute(
+                'SELECT first_name, last_name FROM users WHERE email = ? AND password_hash = ?',
                            (email, password_hash))
             user = cursor.fetchone()
 
         if user:
-             # User found, store user details in session
-             session['first_name'] = user[0]
-             session['last_name'] = user[1]
-             print(f"Session data; {session}")
-             return redirect(url_for('profile'))  # Redirect to profile page
-        else:
-            flash('Invalid email or password', 'danger')
-            return render_template('login.html')
+            # User found, store user details in session
+            session['first_name'] = user[0]
+            session['last_name'] = user[1]
+            print(f"Session data; {session}")
+            return redirect(url_for('profile'))  # Redirect to profile page
+
+        flash('Invalid email or password', 'danger')
+        return render_template('login.html')
 
     return render_template('login.html')
 
 @app.route('/welcome')
 def welcome():
+    """Renders the personal welcome page"""
     if 'first_name' in session and 'last_name' in session:
        # Retrieve data from session
         first_name = session['first_name']
@@ -212,27 +232,33 @@ def welcome():
 
 @app.route('/cart')
 def cart():
-   if 'cart' not in session or not session['cart']:
-       # Empty cart
+    """Presents the cart to the user"""
+    if 'cart' not in session or not session['cart']:
+        # Empty cart
         return render_template('cart.html', cart_items=[], total=0)
 
-   cart_items = session['cart']
-   # Calculate total cost
-   total = sum(item['price'] * item['quantity'] for item in cart_items)
+    cart_items = session['cart']
+    # Calculate total cost
+    total = sum(item['price'] * item['quantity'] for item in cart_items)
 
-   return render_template('cart.html', cart_items=cart_items, total=total)
+    return render_template('cart.html', cart_items=cart_items, total=total)
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
+    """Renders the checkout page"""
     return render_template('checkout.html')
 
 @app.route('/process_payment', methods=['POST'])
 def process_payment():
-    # Process the form data here
-    full_name = request.form.get('full_name')
+    """
+    Processes user payment
+    (simply renders thank-you page because processing payments is not in the scope of this project)
+    """
+    # Process the form data here (unused form content has been commented out)
+    # full_name = request.form.get('full_name')
     email = request.form.get('email')
-    address = request.form.get('address')
-    payment_method = request.form.get('payment_method')
+    # address = request.form.get('address')
+    # payment_method = request.form.get('payment_method')
 
     # Add logic for saving data or processing payment here
     return render_template('thank_you_for_order.html', email=email)
@@ -240,6 +266,8 @@ def process_payment():
 
 @app.route('/create_user', methods = ['POST', 'GET'])
 def create_user():
+    """Registers a new user"""
+    # pylint: disable=broad-exception-caught
     try:
         first_name = request.form['first-name']
         last_name = request.form['last-name']
@@ -250,7 +278,9 @@ def create_user():
         newsletter = request.form['newsletter']
 
         if password != confirm_password:
-            return render_template('signup.html', msg='Passwords do not match')
+            return render_template(
+                'signup.html',
+                msg='Passwords do not match')
 
         with sqlite3.connect(app.config['DB_REF']) as conn:
             password_hash = hash_password(password)
@@ -259,7 +289,8 @@ def create_user():
             cursor.execute('''
                         INSERT INTO users (
                             first_name, last_name, email, password_hash, phone_number, gets_newsletters
-                        ) VALUES (?,?,?,?,?,?)''', (first_name, last_name, email, password_hash, phone, newsletter))
+                        ) VALUES (?,?,?,?,?,?)''',
+                           (first_name, last_name, email, password_hash, phone, newsletter))
             conn.commit()
             target = 'thank_you.html'
             msg = ''
@@ -270,14 +301,17 @@ def create_user():
         msg = 'Error: ' + str(e)
     finally:
         conn.close()
-        return render_template(target, msg=msg)
+    # pylint: enable=broad-exception-caught
+    return render_template(target, msg=msg)
 
 
 @app.route('/signup')
 def signup():
+    """Renders the signup page"""
     return render_template('signup.html', msg='')
 
 def create_db():
+    """Creates and initializes the database"""
     conn = sqlite3.connect(app.config['DB_REF'])
     cursor = conn.cursor()
     cursor.execute('''
@@ -332,6 +366,7 @@ def create_db():
 
 # DANGER: this function will delete everything from the database. Use at your own risk.
 def drop_db():
+    """Drops all tables in the database"""
     with sqlite3.connect((app.config['DB_REF'])) as conn:
         cursor = conn.cursor()
 
@@ -347,6 +382,8 @@ def drop_db():
 
 # DANGER: USE SPARINGLY! Make sure to clean up any lingering foreign keys before using this
 def reset_cookies():
+    """Deletes all cookies from the cookies table"""
+    # pylint: disable=broad-exception-caught
     try:
         with sqlite3.connect(app.config['DB_REF']) as conn:
             cursor = conn.cursor()
@@ -358,10 +395,13 @@ def reset_cookies():
         print("Failed to purge cookies table: " + str(e))
     finally:
         conn.close()
+    # pylint: enable=broad-exception-caught
 
 def read_csv():
+    """Reads the cookies CSV file"""
+    # pylint: disable=broad-exception-caught
     try:
-        with open("cookies_table.csv", 'r') as file_reader:
+        with open("cookies_table.csv", 'r', encoding='utf-8') as file_reader:
             reader = csv.reader(file_reader)
             output = list(reader)
     except Exception as e:
@@ -369,9 +409,12 @@ def read_csv():
         output = []
     finally:
         file_reader.close()
-        return output
+    # pylint: enable=broad-exception-caught
+    return output
 
 def seed_cookies():
+    """Seeds the cookies table if empty"""
+    # pylint: disable=broad-exception-caught
     try:
         with sqlite3.connect(app.config['DB_REF']) as conn:
             cursor = conn.cursor()
@@ -390,7 +433,8 @@ def seed_cookies():
                         cursor.execute('''
                                         INSERT INTO cookies (
                                             name, description, price, image_url, category
-                                        ) VALUES (?,?,?,?,?); ''', [name, desc, price, img_url, cat])
+                                        ) VALUES (?,?,?,?,?); ''',
+                                       [name, desc, price, img_url, cat])
                         conn.commit()
                     print("Cookies seeded")
                 else:
@@ -402,19 +446,23 @@ def seed_cookies():
         print("Error seeding cookies: " + str(e))
     finally:
         conn.close()
-
+    # pylint: enable=broad-exception-caught
 
 def seed_test_user():
+    """Seeds a test user. Used to support pytest"""
     with sqlite3.connect(app.config['DB_REF']) as conn:
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO users (
                 first_name, last_name, email, password_hash, phone_number, gets_newsletters
-            ) VALUES (?,?,?,?,?,?); ''', ['John', 'Doe', 'test@example.com', hash_password('hashedpassword'), '000-000-0000', 1])
+            ) VALUES (?,?,?,?,?,?); ''',
+                       ['John', 'Doe', 'test@example.com',
+                        hash_password('hashedpassword'), '000-000-0000', 1])
         conn.commit()
 
 @app.route('/logout')
 def logout():
+    """Logs out a user"""
     # Clear all session data
     session.clear()
     flash("You have been successfully logged out.", "success")
