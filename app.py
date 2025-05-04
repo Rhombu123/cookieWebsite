@@ -1,3 +1,4 @@
+
 """
 app.py
 
@@ -16,7 +17,6 @@ import csv
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask import flash
-
 
 def hash_password(password):
     """Hashes a password using SHA-256 and encodes it in base64."""
@@ -123,7 +123,9 @@ def add_to_cart():
 def profile_old():
     """Displays an old version of the user's profile page."""
     if 'first_name' not in session or 'last_name' not in session:
-        flash("You need to log in to view your profile.", "danger")
+        flash(
+            "You need to log in to view your profile.",
+            "danger")
         return redirect(url_for('login'))
 
     user_first_name = session['first_name']
@@ -145,7 +147,9 @@ def profile_old():
 def update_profile():
     """Updates the user's profile information in the database."""
     if 'first_name' not in session or 'last_name' not in session:
-        flash("You need to log in to update your profile.", "danger")
+        flash(
+            "You need to log in to update your profile.",
+            "danger")
         return redirect(url_for('login'))
 
     # Get updated profile details from the form
@@ -382,7 +386,9 @@ def create_user():
         newsletter = request.form['newsletter']
 
         if password != confirm_password:
-            return render_template('signup.html', msg='Passwords do not match')
+            return render_template(
+                'signup.html',
+                msg='Passwords do not match')
 
         with sqlite3.connect(app.config['DB_REF']) as conn:
             password_hash = hash_password(password)
@@ -539,7 +545,6 @@ def read_csv():
         file_reader.close()
     return output
 
-
 def seed_cookies():
     """Seeds the cookies table from cookies_table.csv if empty."""
     try:
@@ -576,7 +581,6 @@ def seed_cookies():
         print("Error seeding cookies: " + str(e))
     finally:
         conn.close()
-
 
 def seed_test_user():
     """Adds a test user to the users table."""
