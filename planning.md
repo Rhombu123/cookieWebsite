@@ -143,6 +143,45 @@ Jinja Template by Abdal, API code by Angel
 | `/profile` | GET | None | With `first_name` and `last_name` from session, renders `profile.html` (account info). Without session info, redirects to `/login`. |
 | `/update_profile` | POST | `first_name`: User's first name, `last_name`: User's last name, `email`: User's email, `phone`: User's phone number, `newsletter`: whether the user wants to receive newsletters | Redirects to `/login` if user is not logged in, or to `/profile` after updating their info. |
 
+### Tools used
+
+#### Static Analysis - by Angel
+**flake8**:
+- Multiple lines: indentation, line too long, > or < blank lines.
+- local variable 'full_name' is assigned to but never used
+- local variable 'address' is assigned to but never used
+- local variable 'payment_method' is assigned to but never used
+
+**pylint**
+- missing module docstrings
+- missing function docstrings
+- 'return' shadowed by the 'finally' clause. (return-in-finally)
+- Catching too general exception Exception (broad-exception-caught)
+- Redefining name 'cart' from outer scope (line 251) (redefined-outer-name)
+- Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+- 'return' shadowed by the 'finally' clause. (return-in-finally)
+- Catching too general exception Exception (broad-exception-caught)
+- return statement in finally block may swallow exception (lost-exception)
+- Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
+- Catching too general exception Exception (broad-exception-caught)
+- 'return' shadowed by the 'finally' clause. (return-in-finally)
+- Catching too general exception Exception (broad-exception-caught)
+- Using open without explicitly specifying an encoding (unspecified-encoding)
+- return statement in finally block may swallow exception (lost-exception)
+- Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
+- Catching too general exception Exception (broad-exception-caught)
+- standard import "sqlite3" should be placed before third party imports "flask.Flask", "flask.flash" (wrong-import-order)
+- standard import "base64" should be placed before third party imports "flask.Flask", "flask.flash" (wrong-import-order)
+- standard import "hashlib.sha256" should be placed before third party imports "flask.Flask", "flask.flash" (wrong-import-order)
+- standard import "csv" should be placed before third party imports "flask.Flask", "flask.flash" (wrong-import-order)
+
+#### Code Rating
+- Rating before: 8.15/10
+- Rating after: 10/10
+
+
+#### Dynamic Analysis - by Anthony
+**pytest**:
 #### Test Coverage
 Developed by Anthony
 
@@ -150,3 +189,5 @@ This app uses pytest for testing. Test configuration uses a separate sqlite file
 Tests cover signup/login functionality, profile accessing and updating, cart manipulation, and simply fetching the homepage. Login tests also test bad email/password inputs.
 Most of the test cases focus on the status code of the response. 302 from `/login`, `/add_to_cart`, and `/clear_cart` indicate success. Some cases, like `/create_user`, return a new template depending on the outcome, so the test must instead check for key phrases in the response data.
 The `/update_profile` test is unique among the other cases. In order to determine success, the test must follow the redirect and check the path.
+
+### 
