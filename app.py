@@ -29,7 +29,8 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_COOKIE_SECURE'] = False
-app.config['DB_REF'] = 'db.sqlite'
+# app.config['DB_REF'] = 'db.sqlite'
+app.config['DB_REF'] = ':memory:'
 
 
 @app.route('/')
