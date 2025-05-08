@@ -391,6 +391,11 @@ def create_user():
                 'signup.html',
                 msg='Passwords do not match')
 
+        if terms != 'on':
+            return render_template(
+                'signup.html',
+                msg='Terms have not been accepted')
+
         with sqlite3.connect(app.config['DB_REF']) as conn:
             password_hash = hash_password(password)
 
