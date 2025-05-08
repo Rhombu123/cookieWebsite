@@ -384,6 +384,7 @@ def create_user():
         confirm_password = request.form['confirm-password']
         phone = request.form['phone']
         newsletter = request.form['newsletter']
+        terms = request.form['terms']
 
         if password != confirm_password:
             return render_template(
@@ -426,7 +427,7 @@ def signup():
     """Displays the signup page."""
     return render_template('signup.html', msg='')
 
-
+@app.route('/init', methods=['GET'])
 def create_db():
     """Creates the SQLite database tables if they do not exist."""
     conn = sqlite3.connect(app.config['DB_REF'])
@@ -491,8 +492,10 @@ def create_db():
         );
     ''')
     conn.commit()
-
     conn.close()
+
+    # reset_cookies()
+    seed_cookies()
 
 # DANGER: this function will delete everything from the database.
 # Use at your own risk.
@@ -614,6 +617,4 @@ def logout():
 
 if __name__ == '__main__':
     create_db()
-    # reset_cookies()
-    seed_cookies()
     app.run(debug=True)
