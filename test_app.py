@@ -2,7 +2,7 @@ from idlelib.rpc import response_queue
 
 
 def test_signup(client):
-    response = client.post('/create_user', data={'first-name': 'John', 'last-name': 'Doe', 'email': 'test@example.com', 'password': 'hashedpassword', 'confirm-password': 'hashedpassword', 'phone': '000-000-0000', 'newsletter': 'False'})
+    response = client.post('/create_user', data={'first-name': 'John', 'last-name': 'Doe', 'email': 'test@example.com', 'password': 'hashedpassword', 'confirm-password': 'hashedpassword', 'phone': '000-000-0000', 'newsletter': 'False', 'terms': 'on'})
 
     assert response.status_code == 200
     assert b'Thank You' in response.data

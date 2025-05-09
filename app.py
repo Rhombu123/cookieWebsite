@@ -15,6 +15,8 @@ from hashlib import sha256
 import csv
 
 from datetime import datetime
+
+import flask
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask import flash
 
@@ -432,7 +434,7 @@ def signup():
     """Displays the signup page."""
     return render_template('signup.html', msg='')
 
-@app.route('/init', methods=['GET'])
+@app.before_request
 def create_db():
     """Creates the SQLite database tables if they do not exist."""
     conn = sqlite3.connect(app.config['DB_REF'])
