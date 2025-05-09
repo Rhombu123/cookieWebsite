@@ -2,6 +2,20 @@
 
 A delightful e-commerce website dedicated to selling artisanal, freshly-baked cookies. Our platform offers a seamless shopping experience for cookie enthusiasts to browse, order, and enjoy premium quality cookies delivered right to their doorstep.
 
+
+![Build Status](https://img.shields.io/github/actions/workflow/status/Rhombu123/cookieWebsite/ci.yml?branch=main)
+
+![Test Coverage](https://img.shields.io/badge/test%20coverage-100%25-brightgreen) 
+
+##  Live Demo
+
+🔗 **App**: [https://cookiewebsite.onrender.com](https://cookiewebsite.onrender.com)  
+📦 **Repo**: [https://github.com/Rhombu123/cookieWebsite](https://github.com/Rhombu123/cookieWebsite)  
+⚙️ **CI/CD Logs**: [GitHub Actions](https://github.com/Rhombu123/cookieWebsite/actions)  
+📋 **Kanban Board**: [GitHub Projects](https://github.com/users/Rhombu123/projects/4/views/1)
+
+
+
 ## Features
 
 - Browse and purchase delicious cookies
@@ -18,6 +32,34 @@ A delightful e-commerce website dedicated to selling artisanal, freshly-baked co
 - Track order history with details (date, status, total)
 - Manage newsletter preferences
 - Secure authentication system
+
+##  CI/CD Pipeline
+
+CI/CD is handled with **GitHub Actions**:
+
+- ✅ Linting using `pylint`
+- ✅ Unit testing with `pytest`
+- ✅ Deployment to **Render** on push to `main`
+- ✅ Workflow halts if linting/tests fail
+
+```yaml
+Trigger: On push to main or PR
+Jobs: Lint, Test, Deploy
+Host: Render (via API)
+```
+ Stretch Goals Implemented
+
+- ✅ CI/CD pipeline with linting, testing, and auto-deploy
+
+- ✅ SSL via Render (automatic HTTPS)
+
+- ✅ Persistent database using SQLite (extensible)
+
+- ✅ Polished UI and bug-free UX
+
+- ✅ Production-ready README
+
+- ✅ GitHub Projects board for issue tracking
 
 ### Setup instructions (how to run it locally)
 
@@ -75,6 +117,27 @@ A delightful e-commerce website dedicated to selling artisanal, freshly-baked co
    - View your order history
    - Manage newsletter preferences
 
+    
+### Testing Instructions
+
+- To run tests for the project using pytest, make sure the virtual environment is activated, and then run:
+```yaml
+pytest --cov=app test_app.py
+pylint app.py
+```
+
+###  Deployment Instructions
+
+1. Deploy to Render
+Every time you push to the main branch, the CI/CD pipeline will automatically deploy your app. The steps for this are included in the GitHub Actions workflow. However, if you want to manually trigger a deploy, you can do so via the Render API by sending a POST request with the following command (configured in your GitHub Actions workflow):
+
+```yaml
+curl -X POST https://api.render.com/v1/services/srv-d0e1q4c9c44c73cgpfu0/deploys \
+            -H "Authorization: Bearer ${{ secrets.project_scrt }}"
+```
+
+2. GitHub Actions for Deployment
+The GitHub Actions workflow automatically triggers a deployment when code is pushed to the main branch. You can check the status of the build and deployment process in the GitHub Actions tab of your repository.
 ### Screenshots
 
 Here are some screenshots of the working project:
@@ -91,6 +154,7 @@ Here are some screenshots of the working project:
 ![profile-view](images/profile-view.png)
 
 ![profile-edit-view](images/profile-edit-view.png)
+
 
 ### Security Features
 
